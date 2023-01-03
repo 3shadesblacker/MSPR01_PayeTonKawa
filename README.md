@@ -1,2 +1,0 @@
-# MSPR01_PayeTonKawa
-
