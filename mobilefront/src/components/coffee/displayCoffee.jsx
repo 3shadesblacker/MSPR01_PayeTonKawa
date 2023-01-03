@@ -1,4 +1,8 @@
 import React from 'react';
+import { productRepository } from '../../repository/productsRepository';
+
+let prods = new productRepository();
+prods.fetch();
 
 const DisplayCoffee = () => {
     return (
