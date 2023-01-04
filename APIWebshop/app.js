@@ -13,6 +13,9 @@ const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
 app.post("/login", (req, res) => {
   const { identifiant, password } = req.body;
+  console.log(identifiant, password);
+  console.log(process.env.IDENTIFIANT, process.env.PASSWORD);
+  console.log(identifiant === process.env.IDENTIFIANT, password === process.env.PASSWORD);
   if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
     const token = generateAccessToken({ identifiant, password });
     res.send(token);
@@ -21,8 +24,18 @@ app.post("/login", (req, res) => {
   }
 })
 
-app.get('/', authentification, (req, res) => {
+app.get('/',  (req, res) => {
   res.send('Bienvenue sur l\'API de PayeTonKawa !');
+});
+
+app.get('/customers', authentification, async (req, res) => {
+  try {
+    const response = await fetch(`${baseUri}/customers`);
+    const customer = await response.json();
+    res.json(customer);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 app.get('/customers/:id', authentification, async (req, res) => {
