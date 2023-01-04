@@ -21,11 +21,11 @@ app.post("/login", (req, res) => {
   }
 })
 
-app.get('/', (req, res) => {
+app.get('/', authentification, (req, res) => {
   res.send('Bienvenue sur l\'API de PayeTonKawa !');
 });
 
-app.get('/customers/:id', async (req, res) => {
+app.get('/customers/:id', authentification, async (req, res) => {
   try {
     const response = await fetch(`${baseUri}/customers/${req.params.id}`);
     const customer = await response.json();
@@ -35,7 +35,7 @@ app.get('/customers/:id', async (req, res) => {
   }
 });
 
-app.get('/customers/:id/orders', async (req, res) => {
+app.get('/customers/:id/orders', authentification, async (req, res) => {
   try {
     const response = await fetch(`${baseUri}/customers/${req.params.id}/orders`);
     const orders = await response.json();
@@ -45,7 +45,7 @@ app.get('/customers/:id/orders', async (req, res) => {
   }
 });
 
-app.get('/customers/:id/orders/:id', async (req, res) => {
+app.get('/customers/:id/orders/:id', authentification, async (req, res) => {
   try {
     const response = await fetch(`${baseUri}/customers/${req.params.id}/orders/${req.params.id}`);
     const order = await response.json();
@@ -55,7 +55,7 @@ app.get('/customers/:id/orders/:id', async (req, res) => {
   }
 });
 
-app.get('/products', async (req, res) => {
+app.get('/products', authentification, async (req, res) => {
   try {
     const response = await fetch(`${baseUri}/products`);
     const products = await response.json();
@@ -65,7 +65,7 @@ app.get('/products', async (req, res) => {
   }
 });
 
-app.get('/products/:id', async (req, res) => {
+app.get('/products/:id', authentification, async (req, res) => {
   try {
     const response = await fetch(`${baseUri}/products/${req.params.id}`);
     const product = await response.json();
@@ -85,8 +85,7 @@ function generateAccessToken(mail) {
 }
 
 function authentification(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = req.headers.authorization
   if (token == null) return res.sendStatus(401);
   jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
