@@ -1,23 +1,75 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0",
-      "title": "My User Project CRUD",
-      "description": "My User Project Application API",
-      "license": {
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
+  "swagger": "2.0",
+  "info": {
+    "description": "Ajouter description",
+    "version": "1.0.0",
+    "title": "Swagger Petstore 2.0"
+  },
+  "tags": [
+    {
+      "name": "login",
+      "description": "Everything about your Pets"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Permet de recupérer le token d'authentification",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Identification réussite",
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWFudCI6ImFkbWluIiwicGFzc3dvcmQiOiJqVktYUWtsdjcxR3hTVllwIiwiaWF0IjoxNjcyNzYzOTI3LCJleHAiOjE2NzI3NjU3Mjd9.IWtedbtwahnIj0iSzV_UuE-LGq0xzLwYw2Vd5ovJddI"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identifiant ou de mot de passe",
+            "schema": {
+              "type": "string",
+              "example": "Identifiant ou mot de passe incorrect"
+            }
+          }
+        }
       }
-    },
-    "host": "localhost:8000",
-    "basePath": "/",
-    "tags": [
-      {
-        "name": "Users",
-        "description": "API for users in the system"
+    }
+  },
+  "definitions": {
+    "Login": {
+      "type": "object",
+      "properties": {
+        "identifiant": {
+          "type": "string",
+          "example": "admin"
+        },
+        "password": {
+          "type": "string",
+          "example": "jVKXQklv71GxSVYp"
+        }
       }
-    ],
-    "schemes": ["http"],
-    "consumes": ["application/json"],
-    "produces": ["application/json"]
+    }
   }
+}

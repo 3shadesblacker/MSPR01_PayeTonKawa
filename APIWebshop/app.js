@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import cors from 'cors';
 import jsonwebtoken from 'jsonwebtoken';
 import swaggerUi from 'swagger-ui-express';
-import * as swaggerDocument from './swagger.json';
+import swaggerDocument from './swagger.json' assert { type: "json" };
 import * as dotenv from 'dotenv'
 
 const app = express();
@@ -16,14 +16,11 @@ const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
 app.post("/login", (req, res) => {
   const { identifiant, password } = req.body;
-  console.log(identifiant, password);
-  console.log(process.env.IDENTIFIANT, process.env.PASSWORD);
-  console.log(identifiant === process.env.IDENTIFIANT, password === process.env.PASSWORD);
   if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
-    const token = generateAccessToken({ identifiant, password });
+    const token = generateAccessToken( identifiant + password );
     res.send(token);
   } else {
-    res.status(500).send("Erreur d'authentification");
+    res.status(403).send("Identifiant ou mot de passe incorrect");
   }
 })
 
@@ -96,8 +93,8 @@ app.listen(3000, () => {
 });
 
 
-function generateAccessToken(mail) {
-  return jsonwebtoken.sign(mail, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1800s' });
+function generateAccessToken(value) {
+  return jsonwebtoken.sign(value, process.env.ACCESS_TOKEN_SECRET, Date().now + 60 * 60 * 1000);
 }
 
 function authentification(req, res, next) {
