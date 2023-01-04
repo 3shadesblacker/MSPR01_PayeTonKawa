@@ -16,3 +16,17 @@ Pour l’application mobile, la société PayeTonKawa souhaite que soient livré
   • Langage de programmation
   • Gestion du code source
 - Gestion du déploiement (CI / CD)
+
+Installer le projet APIWebshop : (Il est necessaire d'avoir noje js afin de lancer l'application)
+  - cd APIWebshop
+  - npm i
+  - nano .env
+    copier les lignes suivante :
+    ACCESS_TOKEN_SECRET=4242XX424208
+    REFRESH_TOKEN_SECRET=424200000X1
+    IDENTIFIANT=admin
+    PASSWORD=jVKXQklv71GxSVYp
+    - Appuyer sur ctrl + x
+    - Appuyer sur la touche "y" du clavier
+    - Appyuer sur la touche "Entrée" du clavier
+  - node app.js
