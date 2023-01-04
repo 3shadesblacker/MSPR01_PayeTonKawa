@@ -20,6 +20,28 @@ app.get('/products', async (req, res) => {
   }
 });
 
+app.get('/stocks', async (req, res) => {
+  try {
+    const response = await fetch(`${baseUri}/stocks`);
+    const stocks = await response.json();
+    console.log(stocks);
+    res.json(stocks);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+app.get('/orders', async (req, res) => {
+  try {
+    const response = await fetch(`${baseUri}/orders`);
+    const orders = await response.json();
+    console.log(orders);
+    res.json(orders);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 app.listen(3000, () => {
   console.log('API listening on port 3000');
 });
