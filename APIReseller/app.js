@@ -60,7 +60,7 @@ app.post('/qrcode', (req, res) => {
   let code = { qrcode: "" };
   qrcode.toDataURL(token)
     .then(url => {
-      code = { qrcode: token }
+      code = { qrcode: url }
     })
     .catch(err => {
       console.error(err)
