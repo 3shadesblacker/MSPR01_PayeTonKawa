@@ -9,10 +9,15 @@
     {
       "name": "login",
       "description": "Everything about your Pets"
+    },
+    {
+      "name": "customers",
+      "description": "Everything about your Pets"
+    },
+    {
+      "name": "products",
+      "description": "Everything about your Pets"
     }
-  ],
-  "schemes": [
-    "http"
   ],
   "paths": {
     "/login": {
@@ -55,6 +60,228 @@
           }
         }
       }
+    },
+    "/customers": {
+      "get": {
+        "tags": [
+          "customers"
+        ],
+        "summary": "Permet de recupérer la liste des clients",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token d'authentification",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Récupération des clients",
+            "schema": {
+              "$ref": "#/definitions/Customers"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identification"
+          },
+          "500": {
+            "description": "Erreur lors de la requete"
+          }
+        }
+      }
+    },
+    "/customers/{id}": {
+      "get": {
+        "tags": [
+          "customers"
+        ],
+        "summary": "Permet de recupérer un client par son id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token d'authentification",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Récupération d'un client par son id",
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identification"
+          },
+          "500": {
+            "description": "Erreur lors de la requete"
+          }
+        }
+      }
+    },
+    "/customers/{id}/orders": {
+      "get": {
+        "tags": [
+          "customers"
+        ],
+        "summary": "Permet de recupérer les commandes d'un client par son id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token d'authentification",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Récupération des commandes d'un client réussite",
+            "schema": {
+              "$ref": "#/definitions/Orders"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identification"
+          },
+          "500": {
+            "description": "Erreur lors de la requete"
+          }
+        }
+      }
+    },
+    "/customers/{id}/orders/{id}": {
+      "get": {
+        "tags": [
+          "customers"
+        ],
+        "summary": "Permet de recupérer une commande d'un client par son id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token d'authentification",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Récupération d'une commandes d'un client réussite",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identification"
+          },
+          "500": {
+            "description": "Erreur lors de la requete"
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Permet de recupérer la liste des produits",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token d'authentification",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Récupération des produits",
+            "schema": {
+              "$ref": "#/definitions/Products"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identification"
+          },
+          "500": {
+            "description": "Erreur lors de la requete"
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Permet de recupérer un produit par son id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token d'authentification",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Récupération d'un produit par son id",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identification"
+          },
+          "500": {
+            "description": "Erreur lors de la requete"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -69,6 +296,149 @@
           "type": "string",
           "example": "jVKXQklv71GxSVYp"
         }
+      }
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "example": "2021-07-30T15:00:00.000Z"
+        },
+        "id": {
+          "type": "string",
+          "example": "1"
+        },
+        "customerId": {
+          "type": "string",
+          "example": "1"
+        }
+      }
+    },
+    "Orders": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Order"
+      }
+    },
+    "Customer": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "example": "2021-07-30T15:00:00.000Z"
+        },
+        "name": {
+          "type": "string",
+          "example": "Dupont"
+        },
+        "username": {
+          "type": "string",
+          "example": "dupont"
+        },
+        "firstname": {
+          "type": "string",
+          "example": "Dupont"
+        },
+        "lastname": {
+          "type": "string",
+          "example": "dupont"
+        },
+        "address": {
+          "type": "object",
+          "properties": {
+            "postalCode": {
+              "type": "string",
+              "example": "75000"
+            },
+            "city": {
+              "type": "string",
+              "example": "Paris"
+            }
+          }
+        },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "firstname": {
+              "type": "string",
+              "example": "Dupont"
+            },
+            "lastname": {
+              "type": "string",
+              "example": "dupont"
+            }
+          }
+        },
+        "company": {
+          "type": "object",
+          "properties": {
+            "companyName": {
+              "type": "string",
+              "example": "Littel LLC"
+            }
+          }
+        },
+        "id": {
+          "type": "string",
+          "example": "1"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          }
+        }
+      }
+    },
+    "Customers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Customer"
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Littel LLC"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2021-07-30T15:00:00.000Z"
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "price": {
+              "type": "string",
+              "example": "820.00"
+            },
+            "description": {
+              "type": "string",
+              "example": "Pet object that needs to be added to the store"
+            },
+            "color": {
+              "type": "string",
+              "example": "red"
+            }
+          }
+        },
+        "stock": {
+          "type": "string",
+          "example": "10"
+        },
+        "id": {
+          "type": "string",
+          "example": "1"
+        }
+      }
+    },
+    "Products": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Product"
       }
     }
   }
