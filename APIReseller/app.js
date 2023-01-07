@@ -1,11 +1,10 @@
 import express from 'express';
-import fetch from 'node-fetch';
+import nodemailer from 'nodemailer';
+import qrcode from 'qrcode';
+import handlebars from 'handlebars';
 import cors from 'cors';
-
 const app = express();
 
-//allow cross origin requests
-app.use(cors());
 
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
@@ -46,6 +45,62 @@ app.get('/orders', async (req, res) => {
   }
 });
 
-app.listen(3001, () => {
-  console.log('API listening on port 3001');
+app.post('/qrcode', (req, res) => {
+  const { to, token } = req.body
+
+  // transporter object
+  const transporter = nodemailer.createTransport({
+    service: 'email',
+    auth: {
+      user: 'address@email.com',
+      pass: 'password'
+    }
+  })
+
+  // generating a qrcode
+  let code = { qrcode: "" };
+  qrcode.toDataURL(token)
+    .then(url => {
+      code = { qrcode: url }
+    })
+    .catch(err => {
+      console.error(err)
+    })
+
+  // creating html file to be sent  
+  let template = handlebars.compile(readFile('mail.html', 'utf8'));
+  html = template(code);
+
+  // create the email options
+  const mailOptions = {
+    from: 'address@email.com',
+    to: to,
+    html: html
+  }
+
+  // send the email using the transporter
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error)
+      res.status(500).send({ message: 'Error sending email' })
+    } else {
+      console.log('Email sent: ' + info.response)
+      res.send({ message: 'Email sent successfully' })
+    }
+  })
+})
+
+app.post("/submit", (req, res) => {
+  const { token } = req.body;
+  if (token == null) return res.sendStatus(401);
+  jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    res.send(token)
+    next();
+  });
+})
+
+app.listen(3000, () => {
+  console.log('API listening on port 3000');
 });
