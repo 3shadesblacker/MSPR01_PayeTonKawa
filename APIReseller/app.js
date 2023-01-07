@@ -89,6 +89,17 @@ app.post('/qrcode', (req, res) => {
   })
 })
 
+app.post("/submit", (req, res) => {
+  const { token } = req.body;
+  if (token == null) return res.sendStatus(401);
+  jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    res.send(token)
+    next();
+  });
+})
+
 app.listen(3000, () => {
   console.log('API listening on port 3000');
 });
