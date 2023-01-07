@@ -3,11 +3,8 @@ import nodemailer from 'nodemailer';
 import qrcode from 'qrcode';
 import handlebars from 'handlebars';
 import cors from 'cors';
-
 const app = express();
 
-//allow cross origin requests
-app.use(cors());
 
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
