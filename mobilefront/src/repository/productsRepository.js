@@ -1,7 +1,7 @@
 export class productRepository {
     
     constructor(){
-        this.url = "http://localhost:5000/products";
+        this.url = "http://localhost:3001/products";
     }
 
     fetch(){
