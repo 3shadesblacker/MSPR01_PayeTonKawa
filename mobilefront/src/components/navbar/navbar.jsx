@@ -21,7 +21,7 @@ const Navbar = () => {
                             /* custom element */
                            <Link to="coffee">
                             <span><Icon path={mdiCoffee} size={1}/></span>
-                            <span class="p-menuitem-text">Coffee</span>
+                            <span className="p-menuitem-text">Coffee</span>
                            </Link>
                         );
                     }
@@ -34,7 +34,7 @@ const Navbar = () => {
                             /* custom element */
                            <Link to="login">
                             <span><Icon path={mdiLogin} size={1}/></span>
-                            <span class="p-menuitem-text">Login</span>
+                            <span className="p-menuitem-text">Login</span>
                            </Link>
                         );
                     }
