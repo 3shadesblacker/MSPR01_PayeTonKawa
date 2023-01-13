@@ -9,7 +9,7 @@ import * as dotenv from 'dotenv'
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 dotenv.config();
 
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
@@ -88,8 +88,8 @@ app.get('/products/:id', authentification, async (req, res) => {
   }
 });
 
-app.listen(3001, () => {
-  console.log('API listening on port 3001');
+app.listen(3000, () => {
+  console.log('API listening on port 3000');
 });
 
 

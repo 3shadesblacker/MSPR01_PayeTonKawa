@@ -3,7 +3,7 @@ version: '3'
 services:
   apiwebshop:
     container_name: apiwebshop
-    build: ./apiwebshop
+    image: ikondesign/apiwebshop:latest
     ports:
       - "3000:3000"
     environment:
@@ -11,21 +11,34 @@ services:
       - REFRESH_TOKEN_SECRET=424200000X1
       - IDENTIFIANT=admin
       - PASSWORD=jVKXQklv71GxSVYp
+    networks:
+      - payetonkawa
+    depends_on:
+      - sonarqube
 
-  # sonarqube:
-  #   image: sonarqube:community
-  #   ports:
-  #     - "9000:9000"
+  sonarqube:
+    image: sonarqube:community
+    ports:
+      - "9000:9000"
+    networks:
+      - payetonkawa
 
-  # jenkins
+  # jenkins 
 
   apireseller:
     container_name: apireseller
     build: ./apireseller
     ports:
-      - "3001:3000"
+      - "3001:3001"
     environment:
       - ACCESS_TOKEN_SECRET=4242XX424208
       - REFRESH_TOKEN_SECRET=424200000X1
       - IDENTIFIANT=admin
       - PASSWORD=jVKXQklv71GxSVYp
+    networks:
+      - payetonkawa
+    depends_on:
+      - sonarqube
+
+networks:
+  payetonkawa:
