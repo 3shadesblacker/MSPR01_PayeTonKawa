@@ -2,8 +2,17 @@ pipeline {
   agent any
 
   stages {
-    stage("test") {
-        cleanWs()
+    stage("Main build") {
+           def git_branch = "main"
+
+    stage('Checkout SCM') {
+            checkout([$class: 'GitSCM', branches: [[name: git_branch]], 
+            doGenerateSubmoduleConfigurations: false, 
+            extensions: [], 
+            submoduleCfg: [], 
+            userRemoteConfigs: [[credentialsId: 'Github', 
+            url:'https://github.com/3shadesblacker/MSPR01_PayeTonKawa.git']]])
+        }
     }
   }
 //   stage('Clean Workspace') {
