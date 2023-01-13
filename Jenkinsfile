@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   stages {
-    
+    sh "echo toto"
   }
 //   stage('Clean Workspace') {
 //     cleanWs()
