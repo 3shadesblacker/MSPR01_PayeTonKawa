@@ -5,7 +5,7 @@ pipeline {
     stage("Main build") {
            def git_branch = "main"
 
-    stage('Checkout SCM') {
+    step('Checkout SCM') {
             checkout([$class: 'GitSCM', branches: [[name: git_branch]], 
             doGenerateSubmoduleConfigurations: false, 
             extensions: [], 
