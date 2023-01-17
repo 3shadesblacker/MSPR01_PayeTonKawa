@@ -10,17 +10,16 @@ import cryptoJs from 'crypto-js'
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 dotenv.config();
 
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
 app.post("/login", (req, res) => {
   const { identifiant, password } = req.body;
-  console.log(encrypt(identifiant));
   if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
     const token = generateAccessToken( identifiant + password );
-    res.send(token);
+    res.send(encrypt(token));
   } else {
     res.status(403).send("Identifiant ou mot de passe incorrect");
   }
@@ -100,7 +99,7 @@ function generateAccessToken(value) {
 }
 
 function authentification(req, res, next) {
-  const token = req.headers.authorization
+  const token = decrypt(req.headers.authorization)
   if (token == null) return res.sendStatus(401);
   jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
