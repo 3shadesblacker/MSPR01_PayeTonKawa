@@ -11,19 +11,6 @@ services:
       - REFRESH_TOKEN_SECRET=424200000X1
       - IDENTIFIANT=admin
       - PASSWORD=jVKXQklv71GxSVYp
-    networks:
-      - payetonkawa
-    depends_on:
-      - sonarqube
-
-  sonarqube:
-    image: sonarqube:community
-    ports:
-      - "9000:9000"
-    networks:
-      - payetonkawa
-
-  # jenkins 
 
   apireseller:
     container_name: apireseller
@@ -35,10 +22,3 @@ services:
       - REFRESH_TOKEN_SECRET=424200000X1
       - IDENTIFIANT=admin
       - PASSWORD=jVKXQklv71GxSVYp
-    networks:
-      - payetonkawa
-    depends_on:
-      - sonarqube
-
-networks:
-  payetonkawa:
