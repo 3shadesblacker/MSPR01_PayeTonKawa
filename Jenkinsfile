@@ -1,6 +1,6 @@
 pipeline {
-  agent none
-  
+  agent any
+
   stages {
     stage('Clean Workspace') {
       steps{
@@ -24,7 +24,7 @@ pipeline {
     }
     stage("test"){
       steps{
-        sh "coucou"
+        echo "coucou"
       }
     }
   }
