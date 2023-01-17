@@ -22,9 +22,12 @@ pipeline {
         ])
       }
     }
-    stage("test"){
+    stage("docker"){
       steps{
-        echo "coucou"
+        script: '''
+          docker system prune -f
+          docker-compose up --build -ds
+        '''
       }
     }
   }
