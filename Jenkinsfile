@@ -27,7 +27,7 @@ pipeline {
         sh label: "Docker compose",
         script: '''
           docker system prune -f
-          docker-compose up --build
+          docker-compose up -d --build
         '''
       }
     }
