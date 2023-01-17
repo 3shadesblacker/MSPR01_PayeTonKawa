@@ -6,7 +6,7 @@ pipeline {
       }
     }
     stage("Checkout SCM"){
-      step{
+      steps{
         checkout([
           $class: "GitSCM",
           branches: [[name: "docker"]],
@@ -21,7 +21,7 @@ pipeline {
       }
     }
     stage("test"){
-      step{
+      steps{
         sh "coucou"
       }
     }
