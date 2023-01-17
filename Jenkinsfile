@@ -26,7 +26,7 @@ pipeline {
       steps{
         sh label: "Docker compose",
         script: '''
-          docker --privileged system prune -f
+          docker system prune -f
           docker-compose up --build -ds
         '''
       }
