@@ -109,10 +109,10 @@ function authentification(req, res, next) {
 }
 
 function decrypt(value){
-  var bytes = cryptoJs.AES.decrypt(value, "dev");
+  var bytes = cryptoJs.AES.decrypt(value, process.env.SALT);
   return bytes.toString(cryptoJs.enc.Utf8);
 }
 
 function encrypt(value){
-  return cryptoJs.AES.encrypt(value, "dev").toString();
+  return cryptoJs.AES.encrypt(value, process.env.SALT).toString();
 }
