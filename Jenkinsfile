@@ -24,6 +24,7 @@ pipeline {
     }
     stage("docker"){
       steps{
+        sh label: "Docker compose",
         script: '''
           docker system prune -f
           docker-compose up --build -ds
