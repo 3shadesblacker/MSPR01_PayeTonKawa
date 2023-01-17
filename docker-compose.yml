@@ -11,10 +11,12 @@ services:
       - REFRESH_TOKEN_SECRET=424200000X1
       - IDENTIFIANT=admin
       - PASSWORD=jVKXQklv71GxSVYp
+      - SALT=8A74Fr2Cp4HnQK
     networks:
       - payetonkawa
     depends_on:
       - sonarqube
+
 
   sonarqube:
     image: sonarqube:community

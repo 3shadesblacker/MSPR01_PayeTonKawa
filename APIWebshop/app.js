@@ -5,6 +5,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json' assert { type: "json" };
 import * as dotenv from 'dotenv'
+import cryptoJs from 'crypto-js'
 
 const app = express();
 app.use(cors());
@@ -18,7 +19,7 @@ app.post("/login", (req, res) => {
   const { identifiant, password } = req.body;
   if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
     const token = generateAccessToken( identifiant + password );
-    res.send(token);
+    res.send(encrypt(token));
   } else {
     res.status(403).send("Identifiant ou mot de passe incorrect");
   }
@@ -98,11 +99,20 @@ function generateAccessToken(value) {
 }
 
 function authentification(req, res, next) {
-  const token = req.headers.authorization
+  const token = decrypt(req.headers.authorization)
   if (token == null) return res.sendStatus(401);
   jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
     req.user = user;
     next();
   });
+}
+
+function decrypt(value){
+  var bytes = cryptoJs.AES.decrypt(value, process.env.SALT);
+  return bytes.toString(cryptoJs.enc.Utf8);
+}
+
+function encrypt(value){
+  return cryptoJs.AES.encrypt(value, process.env.SALT).toString();
 }
