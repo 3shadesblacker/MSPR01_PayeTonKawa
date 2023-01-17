@@ -12,7 +12,7 @@ services:
     restart: always
     volumes:
         - ./jenkins_compose/jenkins_configuration:/var/jenkins_home
-        - ./var/run/docker.sock:/var/run/docker.sock
+        - /var/run/docker.sock:/var/run/docker.sock
         # - ./usr:/usr/local/bin/docker
 
   sonarqube:
