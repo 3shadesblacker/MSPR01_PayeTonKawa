@@ -2,40 +2,34 @@ pipeline {
   agent any
 
   stages {
-    stage('test'){
-        steps{
-            checkout([$class: 'GitSCM', branches: [[name: git_branch]], 
-            doGenerateSubmoduleConfigurations: false, 
-            extensions: [], 
-            submoduleCfg: [], 
-            userRemoteConfigs: [[credentialsId: 'Github', 
-            url:'https://github.com/3shadesblacker/MSPR01_PayeTonKawa.git']]])
-        }        
+    stage('Clean Workspace') {
+      steps{
+        cleanWs()
+      }
+    }
+    stage("Checkout SCM"){
+      steps{
+        checkout([
+          $class: "GitSCM",
+          branches: [[name: "docker"]],
+          doGenerateSubmoduleConfigurations: false,
+          extensions: [],
+          submoduleCfg: [],
+          userRemoteConfigs: [[
+            credentialsId: "Github",
+            url: "https://github.com/3shadesblacker/MSPR01_PayeTonKawa.git"
+          ]]
+        ])
+      }
+    }
+    stage("docker"){
+      steps{
+        sh label: "Docker compose",
+        script: '''
+          docker system prune -f
+          docker-compose up -d --build
+        '''
+      }
     }
   }
-//   stage('Clean Workspace') {
-//     cleanWs()
-//   }
-  
-//    stage("Main build") {
-//     def git_branch = "main"
-
-//     stage('Checkout SCM') {
-//             checkout([$class: 'GitSCM', branches: [[name: git_branch]], 
-//             doGenerateSubmoduleConfigurations: false, 
-//             extensions: [], 
-//             submoduleCfg: [], 
-//             userRemoteConfigs: [[credentialsId: 'Github', 
-//             url:'https://github.com/3shadesblacker/MSPR01_PayeTonKawa.git']]])
-//         }
-//     }
-    
-//     stage("Docker version"){
-//         sh 'docker version'
-//     }
-    
-//     stage('Docker') {
-//         sh 'docker system prune -f'
-//         sh 'docker-compose up --build'
-//     }
 }
