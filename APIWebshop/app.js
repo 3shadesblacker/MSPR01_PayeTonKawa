@@ -5,17 +5,19 @@ import jsonwebtoken from 'jsonwebtoken';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json' assert { type: "json" };
 import * as dotenv from 'dotenv'
+import cryptoJs from 'crypto-js'
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 dotenv.config();
 
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
 app.post("/login", (req, res) => {
   const { identifiant, password } = req.body;
+  console.log(encrypt(identifiant));
   if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
     const token = generateAccessToken( identifiant + password );
     res.send(token);
@@ -88,8 +90,8 @@ app.get('/products/:id', authentification, async (req, res) => {
   }
 });
 
-app.listen(3001, () => {
-  console.log('API listening on port 3001');
+app.listen(3000, () => {
+  console.log('API listening on port 3000');
 });
 
 
@@ -105,4 +107,13 @@ function authentification(req, res, next) {
     req.user = user;
     next();
   });
+}
+
+function decrypt(value){
+  var bytes = cryptoJs.AES.decrypt(value, "dev");
+  return bytes.toString(cryptoJs.enc.Utf8);
+}
+
+function encrypt(value){
+  return cryptoJs.AES.encrypt(value, "dev").toString();
 }
