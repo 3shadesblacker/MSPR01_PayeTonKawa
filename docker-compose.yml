@@ -3,7 +3,7 @@ version: '3'
 services:
   apiwebshop:
     container_name: apiwebshop
-    image: ikondesign/apiwebshop:latest
+    build: ./apiwebshop
     ports:
       - "3000:3000"
     environment:
