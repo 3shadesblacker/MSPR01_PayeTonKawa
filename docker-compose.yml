@@ -3,7 +3,7 @@ version: '3'
 services:
   apiwebshop:
     container_name: apiwebshop
-    build: ./apiwebshop
+    build: ./APIWebshop
     ports:
       - "3000:3000"
     environment:
@@ -14,7 +14,7 @@ services:
 
   apireseller:
     container_name: apireseller
-    build: ./apireseller
+    build: ./APIReseller
     ports:
       - "3001:3001"
     environment:
