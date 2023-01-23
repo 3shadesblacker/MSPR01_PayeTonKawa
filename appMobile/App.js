@@ -1,12 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, AppRegistry } from 'react-native';
+import React from "react";
+import { NativeRouter, Route, Link, Routes, Outlet } from "react-router-native";
+import Cafe from "./components/coffee/displayCoffee";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>test</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeRouter>
+       <Routes>
+        <Route exact path="/" element={<Cafe />} />
+      </Routes>
+    </NativeRouter>
   );
 }
 
@@ -18,3 +22,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+AppRegistry.registerComponent("MyApp", () => App);
