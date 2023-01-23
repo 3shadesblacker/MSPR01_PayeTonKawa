@@ -1,0 +1,23 @@
+FROM jenkins/jenkins:lts-jdk11
+
+USER root
+
+RUN apt-get update
+RUN apt-get upgrade
+# RUN apt-get install
+RUN apt-get -y install sudo
+# RUN apt-get -qy full-upgrade
+# RUN apt-get install -qy curl 
+RUN apt-get install ca-certificates 
+RUN apt-get install curl 
+RUN apt-get install gnupg 
+RUN apt-get install -y lsb-release
+RUN mkdir -p /etc/apt/keyrings
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+RUN echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+RUN apt-get update -y
+RUN apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-compose
+RUN apt install -y docker-compose
+USER jenkins

@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  jenkins: 
+    build: .
+    container_name: jenkins
+    ports:
+      - 8080:8080
+      - 50000:50000
+    privileged: true
+    user: root
+    restart: always
+    volumes:
+        - ./jenkins_compose/jenkins_configuration:/var/jenkins_home
+        - /var/run/docker.sock:/var/run/docker.sock
+        # - ./usr:/usr/local/bin/docker
+
+  sonarqube:
+    image: sonarqube:community
+    ports:
+      - "9000:9000"
