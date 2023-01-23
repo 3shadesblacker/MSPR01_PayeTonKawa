@@ -2,8 +2,6 @@
 */package-lock.json
 */.env
 *.vsidx
-*/.idea
-*/.vs
 CICD/jenkins_compose
 CICD/var
 */.vs
