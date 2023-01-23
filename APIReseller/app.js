@@ -4,10 +4,14 @@ import qrcode from 'qrcode';
 import handlebars from 'handlebars';
 import fs from 'fs';
 import mysql2 from 'mysql2'
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './swagger.json' assert { type: "json" };
 import cors from 'cors'
 
 const app = express();
+app.use(cors());
 app.use(express.json())
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
@@ -80,7 +84,7 @@ app.post("/submit", (req, res) => {
 
 app.get('/products', async (req, res) => {
   try {
-    const response = await fetch(`${baseUri}/customers`);
+    const response = await fetch(`${baseUri}/products`);
     const customers = await response.json();
     console.log(customers);
     res.json(customers);
@@ -123,13 +127,14 @@ app.get('/stocks/:productId', async (req, res) => {
   }
 });
 
-// create the connection to database
-const connection = mysql2.createConnection({
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: 'adminkawa',
-  database: 'PTonKawa'
+app.get('/orders', async (req, res) => {
+  try {
+    const response = await fetch(`${baseUri}/orders`);
+    const orders = await response.json();
+    res.json(orders);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 // connect to database
