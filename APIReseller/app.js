@@ -25,6 +25,10 @@ app.post('/qrcode', (req, res) => {
     auth: {
       user: 'contact@ikon-design.fr',
       pass: 'adminkawa'
+    },
+    tls: {
+      // do not fail on invalid certs
+      rejectUnauthorized: false,
     }
   })
 
@@ -83,7 +87,7 @@ app.get('/products', async (req, res) => {
   }
 });
 
-app.get('/products/:id', authentification, async (req, res) => {
+app.get('/products/:id', async (req, res) => {
   try {
     const response = await fetch(`${baseUri}/products/${req.params.id}`);
     const product = await response.json();
@@ -104,7 +108,7 @@ app.get('/stocks', async (req, res) => {
   }
 });
 
-app.get('/stocks/:id', authentification, async (req, res) => {
+app.get('/stocks/:id', async (req, res) => {
   try {
     const response = await fetch(`${baseUri}/stocks/${req.params.id}`);
     const stock = await response.json();
@@ -125,7 +129,7 @@ app.get('/orders', async (req, res) => {
   }
 });
 
-app.get('/orders/:id', authentification, async (req, res) => {
+app.get('/orders/:id', async (req, res) => {
   try {
     const response = await fetch(`${baseUri}/orders/${req.params.id}`);
     const order = await response.json();
