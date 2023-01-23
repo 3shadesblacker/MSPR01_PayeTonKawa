@@ -125,11 +125,11 @@ app.get('/orders', async (req, res) => {
   }
 });
 
-app.get('/products/:id', authentification, async (req, res) => {
+app.get('/orders/:id', authentification, async (req, res) => {
   try {
-    const response = await fetch(`${baseUri}/products/${req.params.id}`);
-    const product = await response.json();
-    res.json(product);
+    const response = await fetch(`${baseUri}/orders/${req.params.id}`);
+    const order = await response.json();
+    res.json(order);
   } catch (error) {
     res.status(500).send(error);
   }
