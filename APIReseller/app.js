@@ -5,7 +5,7 @@ import handlebars from 'handlebars';
 import fs from 'fs';
 import cors from 'cors'
 const app = express();
-
+app.user(express.json())
 
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
@@ -51,10 +51,13 @@ app.post('/qrcode', (req, res) => {
 
   // transporter object
   const transporter = nodemailer.createTransport({
-    service: 'smtp.gmail.com',
+    pool: true,
+    host: 'ssl0.ovh.net',
+    port: 465,
+    secure: true,
     auth: {
-      user: 'muspha2.0@email.com',
-      pass: 'password'
+      user: 'contact@ikon-design.fr',
+      pass: 'adminkawa'
     }
   })
 
@@ -74,7 +77,7 @@ app.post('/qrcode', (req, res) => {
 
   // create the email options
   const mailOptions = {
-    from: 'muspha2.0@email.com',
+    from: 'contact@ikon-design.fr',
     to: to,
     html: html
   }
