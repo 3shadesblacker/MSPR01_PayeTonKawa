@@ -3,7 +3,7 @@ version: '3'
 services:
   apiwebshop:
     container_name: apiwebshop
-    build: ./apiwebshop
+    build: ./APIWebshop
     ports:
       - "3000:3000"
     environment:
@@ -12,18 +12,11 @@ services:
       - IDENTIFIANT=admin
       - PASSWORD=jVKXQklv71GxSVYp
 
-  # sonarqube:
-  #   image: sonarqube:community
-  #   ports:
-  #     - "9000:9000"
-
-  # jenkins
-
   apireseller:
     container_name: apireseller
-    build: ./apireseller
+    build: ./APIReseller
     ports:
-      - "3001:3000"
+      - "3001:3001"
     environment:
       - ACCESS_TOKEN_SECRET=4242XX424208
       - REFRESH_TOKEN_SECRET=424200000X1

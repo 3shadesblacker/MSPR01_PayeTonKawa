@@ -5,7 +5,7 @@ export class productRepository {
     }
 
     fetch(){
-        fetch(this.url).then( data => {return data})
+        return fetch(this.url).then( response => response.json())
     }
 
 }
