@@ -1,0 +1,375 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Ajouter description",
+    "version": "1.0.0",
+    "title": "Swagger Petstore 2.0"
+  },
+  "tags": [
+    {
+      "name": "login",
+      "description": "Everything about your Pets"
+    },
+    {
+      "name": "products",
+      "description": "Everything about your Pets"
+    },
+    {
+      "name": "stock",
+      "description": "Everything about your Pets"
+    },
+    {
+      "name": "orders",
+      "description": "Everything about your Pets"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Permet de recupérer le token d'authentification",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Identification réussite",
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWFudCI6ImFkbWluIiwicGFzc3dvcmQiOiJqVktYUWtsdjcxR3hTVllwIiwiaWF0IjoxNjcyNzYzOTI3LCJleHAiOjE2NzI3NjU3Mjd9.IWtedbtwahnIj0iSzV_UuE-LGq0xzLwYw2Vd5ovJddI"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identifiant ou de mot de passe",
+            "schema": {
+              "type": "string",
+              "example": "Identifiant ou mot de passe incorrect"
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Permet de recupérer la liste des produits",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token d'authentification",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Récupération des produits",
+            "schema": {
+              "$ref": "#/definitions/Products"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identification"
+          },
+          "500": {
+            "description": "Erreur lors de la requete"
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Permet de recupérer un produit par son id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token d'authentification",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Récupération des stocks disponibles",
+            "schema": {
+              "$ref": "#/definitions/Stocks"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identification"
+          },
+          "500": {
+            "description": "Erreur lors de la requete"
+          }
+        }
+      }
+    },
+    "/stock": {
+      "get": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Permet de recupérer la liste des stocks",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token d'authentification",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Récupération d'un produit par son id",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identification"
+          },
+          "500": {
+            "description": "Erreur lors de la requete"
+          }
+        }
+      }
+    },
+    "/stock/{id}": {
+      "get": {
+        "tags": [
+          "stock"
+        ],
+        "summary": "Permet de recupérer un stock",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/string"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Token d'authentification",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Récupération d'un stock par son id",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "403": {
+            "description": "Probléme d'identification"
+          },
+          "500": {
+            "description": "Erreur lors de la requete"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Login": {
+      "type": "object",
+      "properties": {
+        "identifiant": {
+          "type": "string",
+          "example": "admin"
+        },
+        "password": {
+          "type": "string",
+          "example": "jVKXQklv71GxSVYp"
+        }
+      }
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "example": "2021-07-30T15:00:00.000Z"
+        },
+        "id": {
+          "type": "string",
+          "example": "1"
+        },
+        "customerId": {
+          "type": "string",
+          "example": "1"
+        }
+      }
+    },
+    "Orders": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Order"
+      }
+    },
+    "Customer": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "example": "2021-07-30T15:00:00.000Z"
+        },
+        "name": {
+          "type": "string",
+          "example": "Dupont"
+        },
+        "username": {
+          "type": "string",
+          "example": "dupont"
+        },
+        "firstname": {
+          "type": "string",
+          "example": "Dupont"
+        },
+        "lastname": {
+          "type": "string",
+          "example": "dupont"
+        },
+        "address": {
+          "type": "object",
+          "properties": {
+            "postalCode": {
+              "type": "string",
+              "example": "75000"
+            },
+            "city": {
+              "type": "string",
+              "example": "Paris"
+            }
+          }
+        },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "firstname": {
+              "type": "string",
+              "example": "Dupont"
+            },
+            "lastname": {
+              "type": "string",
+              "example": "dupont"
+            }
+          }
+        },
+        "company": {
+          "type": "object",
+          "properties": {
+            "companyName": {
+              "type": "string",
+              "example": "Littel LLC"
+            }
+          }
+        },
+        "id": {
+          "type": "string",
+          "example": "1"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          }
+        }
+      }
+    },
+    "Customers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Customer"
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Littel LLC"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2021-07-30T15:00:00.000Z"
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "price": {
+              "type": "string",
+              "example": "820.00"
+            },
+            "description": {
+              "type": "string",
+              "example": "Pet object that needs to be added to the store"
+            },
+            "color": {
+              "type": "string",
+              "example": "red"
+            }
+          }
+        },
+        "stock": {
+          "type": "string",
+          "example": "10"
+        },
+        "id": {
+          "type": "string",
+          "example": "1"
+        }
+      }
+    },
+    "Products": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Product"
+      }
+    }
+  }
+}
