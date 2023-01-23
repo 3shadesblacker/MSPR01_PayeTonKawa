@@ -8,14 +8,9 @@ const Cafe = () => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState(undefined);
 
-    useEffect( async () => {
-        try {
-            const response = await fetch('https://reactnative.dev/movies.json');
-            const json = await response.json();
-            return json.movies;
-        } catch (error) {
-            console.error(error);
-        }
+    useEffect( () => {
+        products.fetchC()
+        .then( data => {setLoading(false); setData(data)})
     })
     
     if(loading){
