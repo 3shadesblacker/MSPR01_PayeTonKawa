@@ -5,7 +5,7 @@ import handlebars from 'handlebars';
 import fs from 'fs';
 import cors from 'cors'
 const app = express();
-app.user(express.json())
+app.use(express.json())
 
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
