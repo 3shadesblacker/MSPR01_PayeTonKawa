@@ -2,7 +2,8 @@ import express from 'express';
 import nodemailer from 'nodemailer';
 import qrcode from 'qrcode';
 import handlebars from 'handlebars';
-import cors from 'cors';
+import fs from 'fs';
+import cors from 'cors'
 const app = express();
 
 
@@ -50,9 +51,9 @@ app.post('/qrcode', (req, res) => {
 
   // transporter object
   const transporter = nodemailer.createTransport({
-    service: 'email',
+    service: 'smtp.gmail.com',
     auth: {
-      user: 'address@email.com',
+      user: 'muspha2.0@email.com',
       pass: 'password'
     }
   })
@@ -68,12 +69,12 @@ app.post('/qrcode', (req, res) => {
     })
 
   // creating html file to be sent  
-  let template = handlebars.compile(readFile('mail.html', 'utf8'));
+  let template = handlebars.compile(fs.readFileSync('mail.html', 'utf8'));
   html = template(code);
 
   // create the email options
   const mailOptions = {
-    from: 'address@email.com',
+    from: 'muspha2.0@email.com',
     to: to,
     html: html
   }
