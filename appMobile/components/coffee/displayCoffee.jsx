@@ -7,14 +7,10 @@ const Cafe = () => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState("coucou");
 
-    useEffect(() => {
-        fetch('http://51.38.237.216:3001/products')
-        .then((response) => response.json())
-        .then((json) => {
-            console.log(json)
-            setData(json)})
-        .catch((error) => console.error(error))
-    }, []);
+    useEffect( () => {
+        products.fetchC()
+        .then( data => {setLoading(false); setData(data)})
+    })
     
     if(loading){
         return(

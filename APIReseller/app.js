@@ -3,7 +3,9 @@ import nodemailer from 'nodemailer';
 import qrcode from 'qrcode';
 import handlebars from 'handlebars';
 import fs from 'fs';
+import mysql2 from 'mysql2'
 import cors from 'cors'
+
 const app = express();
 app.use(express.json())
 
@@ -108,36 +110,45 @@ app.get('/stocks', async (req, res) => {
   }
 });
 
-app.get('/stocks/:id', async (req, res) => {
+app.get('/stocks/:productId', async (req, res) => {
   try {
-    const response = await fetch(`${baseUri}/stocks/${req.params.id}`);
-    const stock = await response.json();
-    res.json(stock);
+    const stock = connection.query(
+      `SELECT * FROM STOCKS'
+       WHERE productId = ${req.params.productId}`, (error, results) => {
+      if (error) throw error;
+      res.json(JSON.stringify(results[0]))
+    });
   } catch (error) {
     res.status(500).send(error);
   }
 });
 
-app.get('/orders', async (req, res) => {
-  try {
-    const response = await fetch(`${baseUri}/orders`);
-    const orders = await response.json();
-    console.log(orders);
-    res.json(orders);
-  } catch (error) {
-    res.status(500).send(error);
-  }
+// create the connection to database
+const connection = mysql2.createConnection({
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: 'adminkawa',
+  database: 'PTonKawa'
 });
 
-app.get('/orders/:id', async (req, res) => {
-  try {
-    const response = await fetch(`${baseUri}/orders/${req.params.id}`);
-    const order = await response.json();
-    res.json(order);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
+// connect to database
+connection.connect();
+
+// create a new table
+// connection.query(
+//   'CREATE TABLE TOKENS (id INT PRIMARY KEY, userId INT, token NVARCHAR(256), FOREIGN KEY (userId) REFERENCES USERS(id))',
+//   function (err, results) {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       console.log('Table created successfully!');
+//     }
+//   }
+// );
+
+// close the connection
+connection.end();
 
 app.listen(3001, () => {
   console.log('API listening on port 3001');
