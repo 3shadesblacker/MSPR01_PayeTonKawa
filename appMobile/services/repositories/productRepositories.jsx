@@ -7,9 +7,9 @@ export class productRepository {
     }
 
     async fetch(){
-        return await fetch(this.url).then( response => {response.json()}).catch(function(error) {
+        return await fetch(this.url).then( response => response.json()).catch(function(error) {
             console.log('There has been a problem with your fetch operation: ' + error.message);
-              throw error;
+              throw error;  
             });
     }
 

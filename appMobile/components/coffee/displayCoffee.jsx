@@ -11,8 +11,8 @@ const Cafe = () => {
 
     useEffect( () => {
         products.fetch()
-        .then( data => {setLoading(false); setData(data)})
-    })
+        .then( data => {setData(data);}).then(()=>{setLoading(false);})
+    }, [])
     
     if(loading){
         return(
@@ -20,7 +20,6 @@ const Cafe = () => {
                 {!loading && <Text>test</Text>}
                 <Text>
                     Paye ton kawa
-                    {data}
                 </Text>
                 <Text>
                     Identification
