@@ -1,6 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import {Button, Text, View} from 'react-native';
 import { productRepository } from '../../services/repositories/productRepositories';
+import CustomButton from '../customButton';
 
 const Cafe = () => {
 
@@ -16,6 +17,7 @@ const Cafe = () => {
     if(loading){
         return(
             <View>
+                {!loading && <Text>test</Text>}
                 <Text>
                     Paye ton kawa
                     {data}
@@ -26,7 +28,7 @@ const Cafe = () => {
                 <Text>
                     Afin de vous identifier sur l'application, merci de renseigner votre adresse mail ainsi que votre mot de passe.
                 </Text>
-                <CustomButton title={"Valider"}/>
+                <CustomButton key={"é"}  title={"Valider"}/>
             </View>
         )
     } else if (!loading) {
