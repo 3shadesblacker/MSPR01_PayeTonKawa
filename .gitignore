@@ -7,3 +7,4 @@ CICD/var
 */.vs
 */.idea
 MSPR.pdf
+db/*

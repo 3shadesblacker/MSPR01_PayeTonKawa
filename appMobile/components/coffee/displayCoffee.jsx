@@ -1,15 +1,20 @@
-import React, { Component, useEffect, useState } from 'react';
-import { Button, Text, View } from 'react-native';
-import CustomButton from '../customButton';
+import React, {Component, useEffect, useState} from 'react';
+import {Button, Text, View} from 'react-native';
+import { productRepository } from '../../services/repositories/productRepositories';
 
 const Cafe = () => {
 
-    // let products = new productRsepository();/
+    let products = new productRepository();
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState("coucou");
 
-    if (loading) {
-        return (
+    useEffect( () => {
+        products.fetch()
+        .then( data => {setLoading(false); setData(data)})
+    })
+    
+    if(loading){
+        return(
             <View>
                 <Text>
                     Paye ton kawa

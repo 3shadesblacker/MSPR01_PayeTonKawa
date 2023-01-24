@@ -11,7 +11,7 @@ pipeline {
       steps{
         checkout([
           $class: "GitSCM",
-          branches: [[name: "main"]],
+          branches: [[name: "docker_compose_adding_mysql_db"]],
           doGenerateSubmoduleConfigurations: false,
           extensions: [],
           submoduleCfg: [],
