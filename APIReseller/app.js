@@ -158,6 +158,8 @@ app.post("/submit", (req, res) => {
 })
 
 app.get('/products', async (req, res) => {
+  const { token } = req.body;
+  if (token == null) return res.sendStatus(401);
   try {
     const response = await fetch(`${baseUri}/products`);
     const customers = await response.json();
@@ -169,6 +171,8 @@ app.get('/products', async (req, res) => {
 });
 
 app.get('/products/:id', async (req, res) => {
+  const { token } = req.body;
+  if (token == null) return res.sendStatus(401);
   try {
     const response = await fetch(`${baseUri}/products/${req.params.id}`);
     const product = await response.json();
@@ -179,6 +183,8 @@ app.get('/products/:id', async (req, res) => {
 });
 
 app.get('/stocks', async (req, res) => {
+  const { token } = req.body;
+  if (token == null) return res.sendStatus(401);
   try {
     const response = await fetch(`${baseUri}/stocks`);
     const stocks = await response.json();
@@ -190,8 +196,10 @@ app.get('/stocks', async (req, res) => {
 });
 
 app.get('/stocks/:productId', async (req, res) => {
+  const { token } = req.body;
+  if (token == null) return res.sendStatus(401);
   try {
-    const stock = connection.query(
+    connection.query(
       `SELECT * FROM STOCKS'
        WHERE productId = ${req.params.productId}`, (error, results) => {
       if (error) throw error;
@@ -203,6 +211,8 @@ app.get('/stocks/:productId', async (req, res) => {
 });
 
 app.get('/orders', async (req, res) => {
+  const { token } = req.body;
+  if (token == null) return res.sendStatus(401);
   try {
     const response = await fetch(`${baseUri}/orders`);
     const orders = await response.json();
