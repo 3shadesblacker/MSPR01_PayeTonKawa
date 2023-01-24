@@ -1,28 +1,27 @@
 import React, {Component, useEffect, useState} from 'react';
 import {Button, Text, View} from 'react-native';
-import { productRepository } from '../../services/repositories/productRepositories';
 
 const Cafe = () => {
 
-    let products = new productRepository();
+    // let products = new productRsepository();
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState(undefined);
+    const [data, setData] = useState("coucou");
 
-    useEffect( async () => {
-        try {
-            const response = await fetch('https://reactnative.dev/movies.json');
-            const json = await response.json();
-            return json.movies;
-        } catch (error) {
-            console.error(error);
-        }
-    })
+    useEffect(() => {
+        fetch('http://51.38.237.216:3001/products')
+        .then((response) => response.json())
+        .then((json) => {
+            console.log(json)
+            setData(json)})
+        .catch((error) => console.error(error))
+    }, []);
     
     if(loading){
         return(
             <View>
                 <Text>
                     testtestetstetstetst
+                    {data}
                 </Text>
             </View>
         )
