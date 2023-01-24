@@ -9,16 +9,16 @@ import swaggerDocument from './swagger.json' assert { type: "json" };
 import crypto from 'crypto'
 import cors from 'cors'
 
-const app = express(); B
+const app = express();
 app.use(cors());
 app.use(express.json())
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const connection = mysql2.createConnection({
-  host: 'localhost',
+  host: 'mysqlDB',
   port: 3306,
   user: 'root',
-  password: 'adminkawa',
+  password: 'admin',
   database: 'PTonKawa'
 });
 

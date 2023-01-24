@@ -6,3 +6,4 @@ CICD/jenkins_compose
 CICD/var
 */.vs
 */.idea
+db/*

@@ -1,14 +1,15 @@
 import React, {Component, useEffect, useState} from 'react';
 import {Button, Text, View} from 'react-native';
+import { productRepository } from '../../services/repositories/productRepositories';
 
 const Cafe = () => {
 
-    // let products = new productRsepository();
+    let products = new productRepository();
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState("coucou");
 
     useEffect( () => {
-        products.fetchC()
+        products.fetch()
         .then( data => {setLoading(false); setData(data)})
     })
     
