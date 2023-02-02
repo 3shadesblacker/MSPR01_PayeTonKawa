@@ -23,9 +23,11 @@ pipeline {
       }
     }
     stage("Sonarqube"){
+      steps{
       withSonarQubeEnv('Sonarqube'){
         sh label: "Sonarqube",
         println ${env.SONAR_HOST_URL}
+      }
       }
     }
     stage("docker"){
