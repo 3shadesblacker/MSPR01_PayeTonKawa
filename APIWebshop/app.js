@@ -16,6 +16,7 @@ dotenv.config();
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
 app.post("/login", (req, res) => {
+  console.log(process.env.IDENTIFIANT)
   const { identifiant, password } = req.body;
   if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
     const token = generateAccessToken( identifiant + password );
