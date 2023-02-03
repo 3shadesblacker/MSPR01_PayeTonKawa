@@ -21,6 +21,7 @@ services:
   apiwebshop:
     container_name: apiwebshop
     build: ./APIWebshop
+    restart: always
     ports:
       - "3000:3000"
     environment:
