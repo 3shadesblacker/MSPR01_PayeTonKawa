@@ -27,6 +27,7 @@ services:
     environment:
       - ACCESS_TOKEN_SECRET=4242XX424208
       - REFRESH_TOKEN_SECRET=424200000X1
+      - SALT=coucou
       - IDENTIFIANT=admin
       - PASSWORD=jVKXQklv71GxSVYp
 
