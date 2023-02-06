@@ -22,13 +22,13 @@ pipeline {
         ])
       }
     }
-    // stage("Sonarqube"){
-    //   steps{
-    //   withSonarQubeEnv('sonarqube'){
-    //     println "${env.SONAR_HOST_URL}"
-    //   }
-    //   }
-    // }
+    stage("Sonarqube"){
+      steps{
+      withSonarQubeEnv('sonarqube'){
+        println "${env.SONAR_HOST_URL}"
+      }
+      }
+    }
     stage("docker"){
       steps{
         sh label: "Docker compose",
