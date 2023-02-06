@@ -19,7 +19,6 @@ app.post("/login", (req, res) => {
   const { identifiant, password } = req.body;
   if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
     const token = generateAccessToken(identifiant + password);
-    console.log(token)
     res.send(encrypt(token));
   } else {
     res.status(403).send("Identifiant ou mot de passe incorrect");

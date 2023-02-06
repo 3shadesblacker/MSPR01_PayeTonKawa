@@ -1,12 +1,13 @@
 {
 	"info": {
-		"_postman_id": "2f2c6722-02fb-421c-99ed-fc3a8ea2c9df",
+		"_postman_id": "11b4a060-fa76-4801-830f-e6fe7dc85ac7",
 		"name": "Paytonkawa",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14196323"
 	},
 	"item": [
 		{
-			"name": "http://localhost:3000/",
+			"name": "home",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -29,10 +30,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/",
+					"raw": "http://51.38.237.216:3000/",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"51",
+						"38",
+						"237",
+						"216"
 					],
 					"port": "3000",
 					"path": [
@@ -43,7 +47,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:3000/login",
+			"name": "login",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -71,7 +75,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:3000/customers",
+			"name": "customers",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -96,7 +100,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:3000/customers/1",
+			"name": "customer",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -122,7 +126,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:3000/customers/1/orders",
+			"name": "ordersByCustomers",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -149,7 +153,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:3000/customers/1/orders/1",
+			"name": "orderByCustomers",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -177,7 +181,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:3000/products",
+			"name": "products",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -202,7 +206,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:3000/products/1",
+			"name": "product",
 			"request": {
 				"method": "GET",
 				"header": [
