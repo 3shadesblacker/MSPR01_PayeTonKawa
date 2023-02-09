@@ -19,11 +19,9 @@ const connection = mysql2.createConnection({
   port: 3306,
   user: 'root',
   password: 'admin',
-  database: 'PTonKawa'
+  database: 'ptonKawa'
 });
 
-// connect to database
-connection.connect();
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
 app.get('/', (req, res) => {
@@ -94,38 +92,13 @@ app.get('/signup', (req, res) => {
   }
 });
 
-app.post('/qrcode', (req, res) => {
+app.post('/qrcode', async (req, res) => {
   const { to, token } = req.body
-
-  // transporter object
-  const transporter = nodemailer.createTransport({
-    pool: true,
-    host: 'ssl0.ovh.net',
-    port: 465,
-    secure: true,
-    auth: {
-      user: 'contact@ikon-design.fr',
-      pass: 'adminkawa'
-    },
-    tls: {
-      // do not fail on invalid certs
-      rejectUnauthorized: false,
-    }
-  })
-
-  // generating a qrcode
-  let code;
-  qrcode.toDataURL(token)
-    .then(url => {
-      code = url
-    })
-    .catch(err => {
-      console.error(err)
-    })
+  const qrCode = await generatingQRCode(token)
 
   // creating html file to be sent  
   let template = handlebars.compile(fs.readFileSync('mail.html', 'utf8'));
-  let html = template({ qrcode: code });
+  let html = template({ qrcode: qrCode });
 
   // create the email options
   const mailOptions = {
@@ -134,16 +107,14 @@ app.post('/qrcode', (req, res) => {
     html: html
   }
 
-  // send the email using the transporter
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error)
-      res.status(500).send({ message: 'Error sending email' })
-    } else {
-      console.log('Email sent: ' + info.response)
-      res.send({ message: 'Email sent successfully' })
-    }
-  })
+  const resp = sendMail(mailOptions);
+
+  if (resp) {
+    res.send({ message: 'Email sent successfully' });
+  } else {
+    res.status(500).send({ message: 'Email not sent' });
+  }
+
 })
 
 app.post("/submit", (req, res) => {
@@ -228,3 +199,39 @@ connection.end();
 app.listen(3001, () => {
   console.log('API listening on port 3001');
 });
+
+
+function sendMail(mailOptions) {
+  // transporter object
+  const transporter = nodemailer.createTransport({
+    pool: true,
+    host: 'ssl0.ovh.net',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'contact@ikon-design.fr',
+      pass: 'adminkawa'
+    },
+    tls: {
+      // do not fail on invalid certs
+      rejectUnauthorized: false,
+    }
+  })
+
+  // send the email using the transporter
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return false
+    } else {
+      return true
+    }
+  })
+}
+
+async function generatingQRCode(token) {
+  try {
+    return await qrcode.toDataURL(token)
+  } catch (err) {
+    return err
+  }
+}

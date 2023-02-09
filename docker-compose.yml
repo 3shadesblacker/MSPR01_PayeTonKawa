@@ -8,6 +8,7 @@ services:
     container_name: mysqlDB
     restart: always
     environment:
+      MYSQL_DATABASE: ptonKawa
       MYSQL_ROOT_PASSWORD: admin
     volumes:
       - ./db:/var/lib/mysql
