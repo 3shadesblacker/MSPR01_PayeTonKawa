@@ -19,7 +19,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   user: 'root',
   password: 'admin',
-  database: 'ptonKawa'
+  // database: 'ptonKawa'
 });
 
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
