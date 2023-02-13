@@ -31,12 +31,5 @@ pipeline {
         '''
       }
     }
-    stage("Sonarqube"){
-      steps{
-        sh label: "Sonarqube",
-          script: ''' 
-          npm run sonar-scanner
-          '''
-    }}
   }
 }
