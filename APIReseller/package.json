@@ -20,5 +20,8 @@
     "nodemon": "^2.0.20",
     "qrcode": "^1.5.1",
     "swagger-ui-express": "^4.6.0"
+  },
+  "devDependencies": {
+    "sonarqube-scanner": "^3.0.1"
   }
 }

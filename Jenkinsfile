@@ -26,13 +26,11 @@ pipeline {
       steps{
         sh label: "Sonarqube",
           script: '''
-            docker run \
-            --rm \
-            -e SONAR_HOST_URL="http://localhost:9000" \
-            -e SONAR_SCANNER_OPTS="-Dsonar.projectKey=${squ_a63964f425ab9948667550dfd80f7be1a70f8363}" \
-            -e SONAR_LOGIN="sqp_f5e6fd28c60733d6719520dcb75057f0c53fa970" \
-            -v "${YOUR_REPO}:/usr/src" \
-            sonarsource/sonar-scanner-cli 
+           docker exec -it apireseller bash -c "sonar-scanner \
+  -Dsonar.projectKey=payetonkawa \
+  -Dsonar.sources=. \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=sqp_f5e6fd28c60733d6719520dcb75057f0c53fa970"
           '''
     }}
     stage("docker"){
