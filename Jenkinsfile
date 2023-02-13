@@ -24,15 +24,15 @@ pipeline {
     }
     stage("Sonarqube"){
       steps{
-        script{
-          // def scannerHome = tool 'sonarscan';
-           withSonarQubeEnv('SonarQubeServer'){
-            sh "${tool("sonarscan")}/bin/sonar-scanner \
-                    -Dsonar.projectKey=reactapp \
-                    -Dsonar.projectName=reactapp"
-          }
-        }
-      }
+          script: '''
+            docker run \
+            --rm \
+            -e SONAR_HOST_URL="http://localhost:9000" \
+            -e SONAR_SCANNER_OPTS="-Dsonar.projectKey=${squ_a63964f425ab9948667550dfd80f7be1a70f8363}" \
+            -e SONAR_LOGIN="sqp_f5e6fd28c60733d6719520dcb75057f0c53fa970" \
+            -v "${YOUR_REPO}:/usr/src" \
+            sonarsource/sonar-scanner-cli 
+          '''
     }
     stage("docker"){
       steps{
