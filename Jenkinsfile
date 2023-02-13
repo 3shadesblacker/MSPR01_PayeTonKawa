@@ -26,7 +26,7 @@ pipeline {
       steps{
         sh label: "Sonarqube",
           script: '''
-           docker exec -it apireseller bash -c "sonar-scanner \
+           docker exec apireseller bash -c "sonar-scanner \
   -Dsonar.projectKey=payetonkawa \
   -Dsonar.sources=. \
   -Dsonar.host.url=http://localhost:9000 \
