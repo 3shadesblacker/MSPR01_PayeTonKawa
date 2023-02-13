@@ -24,6 +24,7 @@ pipeline {
     }
     stage("Sonarqube"){
       steps{
+        sh label: "Sonarqube",
           script: '''
             docker run \
             --rm \
