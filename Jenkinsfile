@@ -22,17 +22,6 @@ pipeline {
         ])
       }
     }
-    stage("Sonarqube"){
-      steps{
-        sh label: "Sonarqube",
-          script: '''
-           docker exec apireseller bash -c "sonar-scanner \
-  -Dsonar.projectKey=payetonkawa \
-  -Dsonar.sources=. \
-  -Dsonar.host.url=http://localhost:9000 \
-  -Dsonar.login=sqp_f5e6fd28c60733d6719520dcb75057f0c53fa970"
-          '''
-    }}
     stage("docker"){
       steps{
         sh label: "Docker compose",
@@ -42,5 +31,12 @@ pipeline {
         '''
       }
     }
+    stage("Sonarqube"){
+      steps{
+        sh label: "Sonarqube",
+          script: ''' 
+          sonar-scanner -Dsonar.projectKey=payetonkawa -Dsonar.sources=. -Dsonar.host.url=http://51.38.237.216:9000 -Dsonar.login=sqp_031b3aedacafd5df2464a620a6f28f7ae3e56d4b
+          '''
+    }}
   }
 }
