@@ -35,7 +35,7 @@ pipeline {
       steps{
         sh label: "Sonarqube",
           script: ''' 
-          sonar-scanner -Dsonar.projectKey=payetonkawa -Dsonar.sources=. -Dsonar.host.url=http://51.38.237.216:9000 -Dsonar.login=sqp_031b3aedacafd5df2464a620a6f28f7ae3e56d4b
+          npm run sonar-scanner
           '''
     }}
   }
