@@ -8,9 +8,12 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json' assert { type: "json" };
 import crypto from 'crypto'
 import cors from 'cors'
+import path from 'path';
 
 const app = express();
+const app = express();
 app.use(cors());
+
 app.use(express.json())
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -71,7 +74,7 @@ app.get('/signup', (req, res) => {
   }
 });
 
-app.post('/qrcode', (req, res) => {
+app.post('/qrcode', async (req, res) => {
   const { to, token } = req.body
   // generating a qrcode
   let code;
@@ -85,25 +88,28 @@ app.post('/qrcode', (req, res) => {
 
   // creating html file to be sent  
   let template = handlebars.compile(fs.readFileSync('mail.html', 'utf8'));
-  let html = template({ qrcode: code });
+  let html = template({ qrcode: qrCode });
 
   // create the email options
   const mailOptions = {
-    from: 'Paye Ton Kawa',
+    from: 'contact@ikon-design.fr',
     to: to,
     html: html
   }
 
-  // send the email using the transporter
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error)
-      res.status(500).send({ message: 'Error sending email' })
-    } else {
-      console.log('Email sent: ' + info.response)
-      res.send({ message: 'Email sent successfully' })
-    }
-  })
+  const resp = sendMail(mailOptions);
+
+  if (resp) {
+    res.send({ message: 'Email sent successfully' });
+  } else {
+    res.status(500).send({ message: 'Email not sent' });
+  }
+
+})
+app.get('/qrcode/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+  res.sendFile('./qrcodes/' + id + '.jpg', { root: "." });
 })
 
 app.post("/submit", (req, res) => {

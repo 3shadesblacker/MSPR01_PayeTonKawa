@@ -18,7 +18,7 @@ const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 app.post("/login", (req, res) => {
   const { identifiant, password } = req.body;
   if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
-    const token = generateAccessToken( identifiant + password );
+    const token = generateAccessToken(identifiant + password);
     res.send(encrypt(token));
   } else {
     res.status(403).send("Identifiant ou mot de passe incorrect");
@@ -109,8 +109,7 @@ function authentification(req, res, next) {
 }
 
 function decrypt(value){
-  var bytes = cryptoJs.AES.decrypt(value, process.env.SALT);
-  return bytes.toString(cryptoJs.enc.Utf8);
+  return cryptoJs.AES.decrypt(value, process.env.SALT).toString(cryptoJs.enc.Utf8);
 }
 
 function encrypt(value){

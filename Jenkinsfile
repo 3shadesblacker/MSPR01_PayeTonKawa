@@ -11,7 +11,7 @@ pipeline {
       steps{
         checkout([
           $class: "GitSCM",
-          branches: [[name: "main"]],
+          branches: [[name: "cicd"]],
           doGenerateSubmoduleConfigurations: false,
           extensions: [],
           submoduleCfg: [],
@@ -20,6 +20,13 @@ pipeline {
             url: "https://github.com/3shadesblacker/MSPR01_PayeTonKawa.git"
           ]]
         ])
+      }
+    }
+    stage("Sonarqube"){
+      steps{
+      withSonarQubeEnv('sonarqube'){
+        println "${env.SONAR_HOST_URL}"
+      }
       }
     }
     stage("docker"){
