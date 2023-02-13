@@ -33,7 +33,7 @@ pipeline {
             -v "${YOUR_REPO}:/usr/src" \
             sonarsource/sonar-scanner-cli 
           '''
-    }
+    }}
     stage("docker"){
       steps{
         sh label: "Docker compose",
