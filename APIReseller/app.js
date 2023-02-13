@@ -8,19 +8,21 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json' assert { type: "json" };
 import crypto from 'crypto'
 import cors from 'cors'
+import path from 'path';
 
 const app = express();
 app.use(cors());
+
 app.use(express.json())
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const connection = mysql2.createConnection({
-  host: 'mysqlDB',
-  port: 3306,
-  user: 'root',
-  password: 'admin',
-  // database: 'ptonKawa'
-});
+// const connection = mysql2.createConnection({
+//   host: 'mysqlDB',
+//   port: 3306,
+//   user: 'root',
+//   password: 'admin',
+//   // database: 'ptonKawa'
+// });
 
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
@@ -32,22 +34,22 @@ app.get('/login', (req, res) => {
   const { email, password } = req.body
   try {
     const hash = crypto.createHash('sha256', password);
-    connection.query(
-      `SELECT id FROM USERS
-       WHERE email = ${email}
-       AND passwd = ${hash}`, (error, results) => {
-      if (error || results[0] == null) {
-        console.log(error);
-        res.send('Utilisateur inconnu.');
-      }
-      connection.query(
-        `SELECT token FROM TOKENS
-         WHERE userId = ${results[0]}`, (err, res) => {
-        if (err) console.log(err);
-        res.send(res[0]);
-      })
-      res.json(JSON.stringify(results[0]));
-    });
+    // connection.query(
+    //   `SELECT id FROM USERS
+    //    WHERE email = ${email}
+    //    AND passwd = ${hash}`, (error, results) => {
+    //   if (error || results[0] == null) {
+    //     console.log(error);
+    //     res.send('Utilisateur inconnu.');
+    //   }
+    //   connection.query(
+    //     `SELECT token FROM TOKENS
+    //      WHERE userId = ${results[0]}`, (err, res) => {
+    //     if (err) console.log(err);
+    //     res.send(res[0]);
+    //   })
+    //   res.json(JSON.stringify(results[0]));
+    // });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -57,36 +59,36 @@ app.get('/signup', (req, res) => {
   const { email, password } = req.body
   try {
     const hash = crypto.createHash('sha256', password);
-    connection.query(
-      `SELECT id FROM USERS
-       WHERE email = ${email}`, (error, results) => {
-      if (error || results[0] == null) {
-        connection.query(
-          `INSERT INTO USERS(email, passwd)
-           VALUES(${email}, ${hash});
-           SELECT LAST_INSERT_ID();`, (err, res) => {
-          if (err || res[0] == null) {
-            console.log(err);
-            res.send("An error occured 01.");
-          }
-          const token = crypto.createHmac('sha256', crypto.randomBytes(32).toString('hex'))
-            .update(`${id} The Only Way Out Is Through. ${email}`)
-            .digest('hex');
-          connection.query(
-            `INSERT INTO TOKENS(userID, token)
-             VALUES(${res[0]}, ${token});`, (errr, ress) => {
-            if (errr) {
-              console.log(errr);
-              res.send("An error occured 02.");
-            }
-            res.send(token);
-          })
-          res.send(res[0]);
-        })
-      }
-      console.log(error);
-      res.send('Utilisateur inconnu.');
-    });
+    // connection.query(
+    //   `SELECT id FROM USERS
+    //    WHERE email = ${email}`, (error, results) => {
+    //   if (error || results[0] == null) {
+    //     // connection.query(
+    //     //   `INSERT INTO USERS(email, passwd)
+    //     //    VALUES(${email}, ${hash});
+    //     //    SELECT LAST_INSERT_ID();`, (err, res) => {
+    //     //   if (err || res[0] == null) {
+    //     //     console.log(err);
+    //     //     res.send("An error occured 01.");
+    //     //   }
+    //     //   const token = crypto.createHmac('sha256', crypto.randomBytes(32).toString('hex'))
+    //     //     .update(`${id} The Only Way Out Is Through. ${email}`)
+    //     //     .digest('hex');
+    //     //   // connection.query(
+    //     //   //   `INSERT INTO TOKENS(userID, token)
+    //     //   //    VALUES(${res[0]}, ${token});`, (errr, ress) => {
+    //     //   //   if (errr) {
+    //     //   //     console.log(errr);
+    //     //   //     res.send("An error occured 02.");
+    //     //   //   }
+    //     //   //   res.send(token);
+    //     //   // })
+    //     //   res.send(res[0]);
+    //     // })
+    //   }
+    //   console.log(error);
+    //   res.send('Utilisateur inconnu.');
+    // });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -102,7 +104,7 @@ app.post('/qrcode', async (req, res) => {
 
   // create the email options
   const mailOptions = {
-    from: 'Paye Ton Kawa',
+    from: 'contact@ikon-design.fr',
     to: to,
     html: html
   }
@@ -115,6 +117,11 @@ app.post('/qrcode', async (req, res) => {
     res.status(500).send({ message: 'Email not sent' });
   }
 
+})
+app.get('/qrcode/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+  res.sendFile('./qrcodes/' + id + '.jpg', { root: "." });
 })
 
 app.post("/submit", (req, res) => {
@@ -170,12 +177,12 @@ app.get('/stocks/:productId', async (req, res) => {
   const { token } = req.body;
   if (token == null) return res.sendStatus(401);
   try {
-    connection.query(
-      `SELECT * FROM STOCKS'
-       WHERE productId = ${req.params.productId}`, (error, results) => {
-      if (error) throw error;
-      res.json(JSON.stringify(results[0]))
-    });
+    // connection.query(
+    //   `SELECT * FROM STOCKS'
+    //    WHERE productId = ${req.params.productId}`, (error, results) => {
+    //   if (error) throw error;
+    //   res.json(JSON.stringify(results[0]))
+    // });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -193,8 +200,7 @@ app.get('/orders', async (req, res) => {
   }
 });
 
-// close the connection
-connection.end();
+
 
 app.listen(3001, () => {
   console.log('API listening on port 3001');
