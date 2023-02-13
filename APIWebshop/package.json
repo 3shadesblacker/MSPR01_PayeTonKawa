@@ -6,7 +6,7 @@
   "main": "app.js",
   "scripts": {
     "serve": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +19,9 @@
     "node-fetch": "^3.3.0",
     "nodemon": "^2.0.20",
     "swagger-ui-express": "^4.6.0"
+  },
+  "devDependencies": {
+    "jest": "^29.4.2",
+    "supertest": "^6.3.3"
   }
 }
