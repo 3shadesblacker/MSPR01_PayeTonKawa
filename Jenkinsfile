@@ -26,7 +26,7 @@ pipeline {
       steps{
         script{
           // def scannerHome = tool 'sonarscan';
-           withSonarQubeEnv('SonarQubeScanner'){
+           withSonarQubeEnv('SonarQubeServer'){
             sh "${tool("sonarscan")}/bin/sonar-scanner \
                     -Dsonar.projectKey=reactapp \
                     -Dsonar.projectName=reactapp"
