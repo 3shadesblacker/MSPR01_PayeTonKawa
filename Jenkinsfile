@@ -24,9 +24,14 @@ pipeline {
     }
     stage("Sonarqube"){
       steps{
-      withSonarQubeEnv('sonarqube'){
-        println "${env.SONAR_HOST_URL}"
-      }
+        script{
+          def scannerHome = tool 'sonarscan';
+           withSonarQubeEnv('sonarqube'){
+            sh "${tool("sonarscan")}/bin/sonar-scanner \
+                    -Dsonar.projectKey=reactapp \
+                    -Dsonar.projectName=reactapp"
+          }
+        }
       }
     }
     stage("docker"){
