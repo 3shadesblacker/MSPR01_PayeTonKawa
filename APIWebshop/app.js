@@ -6,6 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json' assert { type: "json" };
 import * as dotenv from 'dotenv'
 import cryptoJs from 'crypto-js'
+//const fetch = require("node-fetch");
 
 const app = express();
 app.use(cors());
