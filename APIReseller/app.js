@@ -9,11 +9,12 @@ import swaggerDocument from './swagger.json' assert { type: "json" };
 import crypto from 'crypto'
 import cors from 'cors'
 
-const app = express(); B
+const app = express();
 app.use(cors());
 app.use(express.json())
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+// mysql database connection pool
 const connection = mysql2.createConnection({
   host: 'localhost',
   port: 3306,
@@ -22,8 +23,22 @@ const connection = mysql2.createConnection({
   database: 'PTonKawa'
 });
 
-// connect to database
-connection.connect();
+// transporter object
+const transporter = nodemailer.createTransport({
+  pool: true,
+  host: 'ssl0.ovh.net',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'contact@ikon-design.fr',
+    pass: 'adminkawa'
+  },
+  tls: {
+    // do not fail on invalid certs
+    rejectUnauthorized: false,
+  }
+})
+
 const baseUri = 'https://615f5fb4f7254d0017068109.mockapi.io/api/v1';
 
 app.get('/', (req, res) => {
@@ -34,22 +49,10 @@ app.get('/login', (req, res) => {
   const { email, password } = req.body
   try {
     const hash = crypto.createHash('sha256', password);
-    connection.query(
-      `SELECT id FROM USERS
-       WHERE email = ${email}
-       AND passwd = ${hash}`, (error, results) => {
-      if (error || results[0] == null) {
-        console.log(error);
-        res.send('Utilisateur inconnu.');
-      }
-      connection.query(
-        `SELECT token FROM TOKENS
-         WHERE userId = ${results[0]}`, (err, res) => {
-        if (err) console.log(err);
-        res.send(res[0]);
-      })
-      res.json(JSON.stringify(results[0]));
-    });
+    connection.connect();
+    const token = authentification(email, hash)
+    connection.end();
+    res.send(token);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -59,36 +62,10 @@ app.get('/signup', (req, res) => {
   const { email, password } = req.body
   try {
     const hash = crypto.createHash('sha256', password);
-    connection.query(
-      `SELECT id FROM USERS
-       WHERE email = ${email}`, (error, results) => {
-      if (error || results[0] == null) {
-        connection.query(
-          `INSERT INTO USERS(email, passwd)
-           VALUES(${email}, ${hash});
-           SELECT LAST_INSERT_ID();`, (err, res) => {
-          if (err || res[0] == null) {
-            console.log(err);
-            res.send("An error occured 01.");
-          }
-          const token = crypto.createHmac('sha256', crypto.randomBytes(32).toString('hex'))
-            .update(`${id} The Only Way Out Is Through. ${email}`)
-            .digest('hex');
-          connection.query(
-            `INSERT INTO TOKENS(userID, token)
-             VALUES(${res[0]}, ${token});`, (errr, ress) => {
-            if (errr) {
-              console.log(errr);
-              res.send("An error occured 02.");
-            }
-            res.send(token);
-          })
-          res.send(res[0]);
-        })
-      }
-      console.log(error);
-      res.send('Utilisateur inconnu.');
-    });
+    connection.connect();
+    const token = signup(email, hash);
+    connection.end();
+    res.send(token);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -96,23 +73,6 @@ app.get('/signup', (req, res) => {
 
 app.post('/qrcode', (req, res) => {
   const { to, token } = req.body
-
-  // transporter object
-  const transporter = nodemailer.createTransport({
-    pool: true,
-    host: 'ssl0.ovh.net',
-    port: 465,
-    secure: true,
-    auth: {
-      user: 'contact@ikon-design.fr',
-      pass: 'adminkawa'
-    },
-    tls: {
-      // do not fail on invalid certs
-      rejectUnauthorized: false,
-    }
-  })
-
   // generating a qrcode
   let code;
   qrcode.toDataURL(token)
@@ -199,11 +159,15 @@ app.get('/stocks/:productId', async (req, res) => {
   const { token } = req.body;
   if (token == null) return res.sendStatus(401);
   try {
+    // connect to database
+    connection.connect();
     connection.query(
       `SELECT * FROM STOCKS'
        WHERE productId = ${req.params.productId}`, (error, results) => {
-      if (error) throw error;
-      res.json(JSON.stringify(results[0]))
+        if (error) { console.log(error) };
+        // close the connection
+        connection.end();
+        res.json(JSON.stringify(results[0]))
     });
   } catch (error) {
     res.status(500).send(error);
@@ -222,8 +186,57 @@ app.get('/orders', async (req, res) => {
   }
 });
 
-// close the connection
-connection.end();
+function authentification(email, hash) {
+  connection.query(
+    `SELECT id FROM USERS
+       WHERE email = ${email}
+       AND passwd = ${hash}`, (error, results) => {
+    if (error || results[0] == null) {
+      console.log(error);
+      return 'Utilisateur inconnu.';
+    }
+    connection.query(
+      `SELECT token FROM TOKENS
+         WHERE userId = ${results[0]}`, (err, res) => {
+      if (err) console.log(err);
+      return res[0];
+    })
+    //res.json(JSON.stringify(results[0]));
+  });
+}
+
+function signup(email, hash) {
+  connection.query(
+    `SELECT id FROM USERS
+       WHERE email = ${email}`, (error, results) => {
+    if (error || results[0] == null) {
+      connection.query(
+        `INSERT INTO USERS(email, passwd)
+         VALUES(${email}, ${hash});
+         SELECT LAST_INSERT_ID();`, (err, res) => {
+        if (err || res[0] == null) {
+          console.log(err);
+          return "An error occured 0x01.";
+        }
+        const token = crypto.createHmac('sha256', crypto.randomBytes(32).toString('hex'))
+          .update(`${id} The Only Way Out Is Through. ${email}`)
+          .digest('hex');
+        connection.query(
+          `INSERT INTO TOKENS(userID, token)
+           VALUES(${res[0]}, ${token});`, (errr) => {
+          if (errr) {
+            console.log(errr);
+            return "An error occured 0x02.";
+          }
+          return token;
+        })
+        //res.send(res[0]);
+      })
+    }
+    console.log(error);
+    return 'Une erreur est survenue, veuillez réssayer.';
+  });
+}
 
 app.listen(3001, () => {
   console.log('API listening on port 3001');
