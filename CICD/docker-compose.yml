@@ -7,10 +7,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.50"
+          cpus: "0.10"
           memory: 512M
         reservations:
-          cpus: "0.25"
+          cpus: "0.10"
           memory: 128M
     ports:
       - 8080:8080
@@ -29,10 +29,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.50"
+          cpus: "0.10"
           memory: 512M
         reservations:
-          cpus: "0.25"
+          cpus: "0.10"
           memory: 128M
     ports:
       - "9000:9000"
