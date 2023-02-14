@@ -4,6 +4,14 @@ services:
   jenkins: 
     build: .
     container_name: jenkins
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
     ports:
       - 8080:8080
       - 50000:50000
