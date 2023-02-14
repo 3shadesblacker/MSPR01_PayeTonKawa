@@ -32,12 +32,12 @@ pipeline {
       }
     }
     stage("SonarQube analysis"){
-      def scannerHome = tool 'SonarScanner 4.0';
+      def scannerHome = tool 'SonarQubeScanner';
       steps{
-        sh label: "Docker compose",
         withSonarQubeEnv(' SonarQubeServers'){ 
         sh "${scannerHome}/bin/sonar-scanner"
-    }
+        }
+      }
     }
   }
-}}
+}
