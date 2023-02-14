@@ -34,6 +34,7 @@ pipeline {
     stage("SonarQube analysis"){
       def scannerHome = tool 'SonarScanner 4.0';
       steps{
+        sh label: "Docker compose",
         withSonarQubeEnv(' SonarQubeServers'){ 
         sh "${scannerHome}/bin/sonar-scanner"
     }
