@@ -4,6 +4,14 @@ services:
   jenkins: 
     build: .
     container_name: jenkins
+    deploy:
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
     ports:
       - 8080:8080
       - 50000:50000
@@ -18,8 +26,17 @@ services:
   sonarqube:
     container_name: sonarqube
     image: sonarqube:community
+    deploy:
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
     ports:
       - "9000:9000"
+    restart: always
     volumes:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions

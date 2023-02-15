@@ -11,7 +11,7 @@ pipeline {
       steps{
         checkout([
           $class: "GitSCM",
-          branches: [[name: "cicd"]],
+          branches: [[name: "main"]],
           doGenerateSubmoduleConfigurations: false,
           extensions: [],
           submoduleCfg: [],
@@ -22,13 +22,6 @@ pipeline {
         ])
       }
     }
-    stage("Sonarqube"){
-      steps{
-      withSonarQubeEnv('sonarqube'){
-        println "${env.SONAR_HOST_URL}"
-      }
-      }
-    }
     stage("docker"){
       steps{
         sh label: "Docker compose",
@@ -36,6 +29,16 @@ pipeline {
           docker system prune -f
           docker-compose up -d --build
         '''
+      }
+    }
+    stage("SonarQube analysis"){
+      environment {
+        scannerHome = tool 'SonarQubeScanner';
+      }
+      steps{
+        withSonarQubeEnv('sonar_qube_server'){ 
+          sh "${scannerHome}/bin/sonar-scanner -X"
+        }
       }
     }
   }
