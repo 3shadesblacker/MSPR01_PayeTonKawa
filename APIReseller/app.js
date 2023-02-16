@@ -8,9 +8,9 @@ import swaggerDocument from './swagger.json' assert { type: "json" };
 import crypto from 'crypto'
 import cors from 'cors'
 import * as dotenv from 'dotenv'
-import users from './SQLRequest/users'
-import tokens from './SQLRequest/tokens'
-import stocks from './SQLRequest/stocks'
+import users from '../SQLRequest/users'
+import tokens from '../SQLRequest/tokens'
+import stocks from '../SQLRequest/stocks'
 
 dotenv.config()
 
