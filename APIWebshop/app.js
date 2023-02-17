@@ -6,7 +6,6 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json' assert { type: "json" };
 import * as dotenv from 'dotenv'
 import cryptoJs from 'crypto-js'
-//const fetch = require("node-fetch");
 
 const app = express();
 app.use(cors());
@@ -100,6 +99,7 @@ function generateAccessToken(value) {
 }
 
 function authentification(req, res, next) {
+  if(req.headers.authorization == null) return res.sendStatus(401);
   const token = decrypt(req.headers.authorization)
   if (token == null) return res.sendStatus(401);
   jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
