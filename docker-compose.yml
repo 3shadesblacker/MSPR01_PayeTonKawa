@@ -35,7 +35,7 @@ services:
   apireseller:
     container_name: apireseller
     build: ./APIReseller
-    restart: on-failure
+    # restart: on-failure
     ports:
       - "3001:3001"
     environment:
