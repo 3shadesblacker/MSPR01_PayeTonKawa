@@ -1,6 +1,7 @@
 const { describe, it } = require('@jest/globals');
 const frisby = require('frisby');
 
+let DOLAPIKEY = null;
 let token = null;
 let baseUrl = "http://51.38.237.216:3000"
 
@@ -20,11 +21,13 @@ describe('API test Login', () => {
     return frisby
       .post(baseUrl + '/login', {
         identifiant: "admin",
-        password: "jVKXQklv71GxSVYp",
+        password: "adminkawa",
       })
       .expect('status', 200)
       .then((res) => {
-        token = res.body;
+        const json = JSON.parse(res.body)
+        token = json.token;
+        DOLAPIKEY = json.DOLAPIKEY;
         return expect(true).toBe(true);
       })
   })
@@ -61,7 +64,6 @@ describe('API test Customers', () => {
   })
   it('tests /customers endpoints with bad token', async () => {
     return frisby
-
       .fetch(baseUrl + '/customers', {
         method: 'GET',
         headers: {
@@ -78,6 +80,9 @@ describe('API test Customers', () => {
         headers: {
           'Authorization': token,
           'Content-Type': 'application/json',
+        },
+        body: {
+          'DOLAPIKEY': DOLAPIKEY
         }
       })
       .expect('status', 200)
