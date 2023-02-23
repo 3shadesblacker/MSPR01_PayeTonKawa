@@ -44,32 +44,32 @@ app.post("/login", async (req, res) => {
   }
 });
 // 
-app.get('/products', authentification, async (req, res) => {
+app.post('/products', authentification, async (req, res) => {
   const { DOLAPIKEY } = req.body;
   await request(`${baseUri}/products`, "GET", DOLAPIKEY, res);
 });
 // 
-app.get('/products/:id', authentification, async (req, res) => {
+app.post('/products/:id', authentification, async (req, res) => {
   const { DOLAPIKEY } = req.body;
   await request(`${baseUri}/products/${req.params.id}`, "GET", DOLAPIKEY, res);
 });
 // 
-app.get('/customers', authentification, async (req, res) => {
+app.post('/customers', authentification, async (req, res) => {
   const { DOLAPIKEY } = req.body;
   await request(`${baseUri}/thirdparties?mode=1`, "GET", DOLAPIKEY, res);
 });
 // 
-app.get('/orders', authentification, async (req, res) => {
+app.post('/orders', authentification, async (req, res) => {
   const { DOLAPIKEY } = req.body;
   await request(`${baseUri}/orders`, "GET", DOLAPIKEY, res);
 });
 // 
-app.get('/prospect', authentification, async (req, res) => {
+app.post('/prospect', authentification, async (req, res) => {
   const { DOLAPIKEY } = req.body;
   await request(`${baseUri}/thirdparties?mode=2`, "GET", DOLAPIKEY, res);
 })
 // 
-app.get('/stocks', authentification, async (req, res) => {
+app.post('/stocks', authentification, async (req, res) => {
   const { DOLAPIKEY } = req.body;
   await request(`${baseUri}/stockmovements`, "GET", DOLAPIKEY, res);
 });
