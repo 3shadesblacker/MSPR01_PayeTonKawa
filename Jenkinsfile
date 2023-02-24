@@ -41,7 +41,7 @@ pipeline {
         }
       }
     }
-    stage("Test"){
+    stage("Test apiwebshop"){
       steps{
         sh label: "Test",
         script: '''
