@@ -11,7 +11,7 @@ pipeline {
       steps{
         checkout([
           $class: "GitSCM",
-          branches: [[name: "main"]],
+          branches: [[name: "cicd"]],
           doGenerateSubmoduleConfigurations: false,
           extensions: [],
           submoduleCfg: [],
@@ -39,6 +39,14 @@ pipeline {
         withSonarQubeEnv('sonar_qube_server'){ 
           sh "${scannerHome}/bin/sonar-scanner -X"
         }
+      }
+    }
+    stage("Test"){
+      steps{
+        sh label: "Test",
+        script: '''
+          docker exec apiwebshop npm test
+        '''
       }
     }
   }
