@@ -25,7 +25,7 @@ services:
 
   sonarqube:
     container_name: sonarqube
-    image: sonarqube:community
+    build: ./sonarqube
     deploy:
       resources:
         limits:
