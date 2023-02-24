@@ -2,12 +2,12 @@ FROM jenkins/jenkins:lts-jdk11
 
 USER root
 
-RUN apt-get update
-RUN apt-get upgrade
+RUN apt-get update -y
+RUN apt-get upgrade -y
 RUN apt-get -y install sudo
-RUN apt-get install ca-certificates 
-RUN apt-get install curl 
-RUN apt-get install gnupg 
+RUN apt-get install ca-certificates  -y
+RUN apt-get install curl -y
+RUN apt-get install gnupg -y
 RUN apt-get install -y lsb-release
 RUN mkdir -p /etc/apt/keyrings
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
