@@ -1,6 +1,6 @@
 FROM sonarqube:community
 
 USER root
-RUN apt-get update && apt-get install nodejs npm -y
+RUN apt-get update -y && apt-get install nodejs npm -y
 USER sonarqube
 
