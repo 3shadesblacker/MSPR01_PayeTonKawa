@@ -30,12 +30,13 @@ services:
       - REFRESH_TOKEN_SECRET=424200000X1
       - SALT=coucou
       - IDENTIFIANT=admin
-      - PASSWORD=jVKXQklv71GxSVYp
+      - PASSWORD=adminkawa
+      - BASE_URI=http://51.38.237.216:8082/api/index.php
 
   apireseller:
     container_name: apireseller
     build: ./APIReseller
-    restart: on-failure
+    # restart: on-failure
     ports:
       - "3001:3001"
     environment:
@@ -44,9 +45,9 @@ services:
       - IDENTIFIANT=admin
       - PASSWORD=jVKXQklv71GxSVYp
   
-  dolibarr:
-    container_name: dolibarr
-    build: ./
-    restart: always
-    ports:
-      - "8082:80"
+  # dolibarr:
+  #   container_name: dolibarr
+  #   build: ./
+  #   restart: always
+  #   ports:
+  #     - "8082:80"
