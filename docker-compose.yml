@@ -44,6 +44,11 @@ services:
       - REFRESH_TOKEN_SECRET=424200000X1
       - IDENTIFIANT=admin
       - PASSWORD=jVKXQklv71GxSVYp
+      - MAIL_HOST=ssl.ovh.net
+      - MAIL_PORT=587
+      - MAIL_USER=contact@ikon-design
+      - MAIL_PASS=adminkawa
+      - BASE_URI=http://51.38.237.216:8082/api/index.php
   
   # dolibarr:
   #   container_name: dolibarr

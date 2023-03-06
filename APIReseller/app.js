@@ -5,7 +5,6 @@ import handlebars from 'handlebars';
 import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json' assert { type: "json" };
-import crypto from 'crypto'
 import cors from 'cors'
 import * as dotenv from 'dotenv'
 
@@ -17,7 +16,7 @@ app.use(cors());
 app.use(express.json())
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// transporter object
+// transporter object 
 const transporter = nodemailer.createTransport({
   pool: true,
   host: process.env.MAIL_HOST,
@@ -32,8 +31,6 @@ const transporter = nodemailer.createTransport({
     rejectUnauthorized: false,
   }
 })
-
-const baseUri = 'http://localhost/dolibarr/api/index.php';
 
 app.get('/', (req, res) => {
   res.send('Bienvenue sur l\'API de PayeTonKawa !');
@@ -80,7 +77,6 @@ app.post('/qrcode', async (req, res) => {
   } else {
     res.status(500).send({ message: 'Email not sent' });
   }
-
 })
 
 app.get('/qrcode/:id', async (req, res) => {
@@ -92,7 +88,7 @@ app.get('/qrcode/:id', async (req, res) => {
 app.post("/submit", (req, res) => {
   const { token } = req.body;
   if (token == null) return res.sendStatus(401);
-  jsonwebtoken.verify(token, process.process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+  jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
     req.user = user;
     res.send(token)
@@ -104,7 +100,7 @@ app.get('/products', async (req, res) => {
   const { token } = req.body;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${baseUri}/products?DOLAPIKEY=${token}`);
+    const response = await fetch(`${process.env.BASE_URL}/products?DOLAPIKEY=${token}`);
     const customers = await response.json();
     console.log(customers);
     res.json(customers);
@@ -117,7 +113,7 @@ app.get('/products/:id', async (req, res) => {
   const { token } = req.body;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${baseUri}/products/${req.params.id}?DOLAPIKEY=${token}`);
+    const response = await fetch(`${process.env.BASE_URL}/products/${req.params.id}?DOLAPIKEY=${token}`);
     const product = await response.json();
     res.json(product);
   } catch (error) {
@@ -125,11 +121,11 @@ app.get('/products/:id', async (req, res) => {
   }
 });
 
-app.get('/stocks/:productId', async (req, res) => {
+app.get('/stocks/:id', async (req, res) => {
   const { token } = req.body;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${baseUri}/products/${req.params.id}/stock?DOLAPIKEY=${token}`);
+    const response = await fetch(`${process.env.BASE_URL}/products/${req.params.id}/stock?DOLAPIKEY=${token}`);
     const stocks = await response.json();
     console.log(stocks);
     res.json(stocks);
@@ -138,11 +134,11 @@ app.get('/stocks/:productId', async (req, res) => {
   }
 });
 
-app.get('/orders', async (req, res) => {
+app.get('/orders/:id', async (req, res) => {
   const { token } = req.body;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${baseUri}/orders`);
+    const response = await fetch(`${process.env.BASE_URL}/orders/${req.params.id}?DOLAPIKEY=${token}`);
     const orders = await response.json();
     res.json(orders);
   } catch (error) {
