@@ -1,9 +1,7 @@
 export class loginRepositories {
     
-    url = "";
-
-    constructor(){
-        this.url = "http://localhost:3000/login";
+    constructor(isRevendeur = false){
+        this.url = isRevendeur ? "http://localhost:3001/login" : "http://localhost:3000/login";
     }
 
     async send(data){
@@ -17,8 +15,8 @@ export class loginRepositories {
         })
         .then( response => response.json()).catch(function(error) {
             console.log('There has been a problem with your fetch operation: ' + error.message);
-              throw error;  
-            });
+            throw error;  
+        });
     }
 
 }
