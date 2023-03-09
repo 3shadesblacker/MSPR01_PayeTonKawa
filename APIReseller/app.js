@@ -36,13 +36,26 @@ app.get('/', (req, res) => {
   res.send('Bienvenue sur l\'API de PayeTonKawa !');
 });
 
-app.get('/login', async (req, res) => {
-  const { login, password } = req.body
-  try {
-    const token = await fetch(`${process.env.BASE_URL}/login?login=${login}&password=${password}[&reset=1]`);
-    res.send(token);
-  } catch (error) {
-    res.status(500).send(error);
+app.post("/login", async (req, res) => {
+  const { identifiant, password } = req.body;
+  if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
+    await fetch(`${baseUri}/login?login=${identifiant}&password=${password}&reset=1`, generateHeader("GET"))
+      .then(response => response.text())
+      .then(result => {
+        const jsonResponse = JSON.parse(result)
+        const sendValue = {
+          DOLAPIKEY: encrypt(jsonResponse.success.token),
+          token: encrypt(generateAccessToken(jsonResponse.success.token))
+        }
+        res.status(200).send(JSON.stringify(sendValue));
+      })
+      .catch(error => {
+        console.log(error),
+          res.status(403).send(error)
+      });
+  } else {
+    console.log("Identifiant ou mot de passe incorrect")
+    res.status(403).send("Identifiant ou mot de passe incorrect");
   }
 });
 

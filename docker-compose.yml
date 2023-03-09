@@ -43,7 +43,7 @@ services:
       - ACCESS_TOKEN_SECRET=4242XX424208
       - REFRESH_TOKEN_SECRET=424200000X1
       - IDENTIFIANT=admin
-      - PASSWORD=jVKXQklv71GxSVYp
+      - PASSWORD=adminkawa
       - MAIL_HOST=ssl.ovh.net
       - MAIL_PORT=587
       - MAIL_USER=contact@ikon-design
