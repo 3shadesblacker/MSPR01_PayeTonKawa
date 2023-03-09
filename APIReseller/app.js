@@ -38,11 +38,26 @@ app.get('/', (req, res) => {
 
 app.post("/login", async (req, res) => {
 
-  const login = req.body.login.login;
-  const password = req.body.password.password;
-
-  const token = await fetch(`${process.env.BASE_URL}/login?login=${login}&password=${password}`);
-  res.send(token);
+  const { identifiant, password } = req.body;
+  if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
+    await fetch(`${baseUri}/login?login=${identifiant}&password=${password}&reset=1`, generateHeader("GET"))
+      .then(response => response.text())
+      .then(result => {
+        const jsonResponse = JSON.parse(result)
+        const sendValue = {
+          DOLAPIKEY: encrypt(jsonResponse.success.token),
+          token: encrypt(generateAccessToken(jsonResponse.success.token))
+        }
+        res.status(200).send(JSON.stringify(sendValue));
+      })
+      .catch(error => {
+        console.log(error),
+          res.status(403).send(error)
+      });
+  } else {
+    console.log("Identifiant ou mot de passe incorrect")
+    res.status(403).send("Identifiant ou mot de passe incorrect");
+  }
   
 });
 
