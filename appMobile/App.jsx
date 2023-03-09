@@ -1,10 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, AppRegistry } from 'react-native';
 import {React, useState} from "react";
-import { NativeRouter, Route, Link, Routes, Outlet } from "react-router-native";
 // import Cafe from "./components/coffee/displayCoffee";
 import Scanner from './components/qrCode/scanner';
-import Header from './components/header';
 import { Button } from '@rneui/base';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -23,13 +21,12 @@ function DetailsScreen({ navigation }) {
       const value = await AsyncStorage.getItem('token')
       if(value !== null) {
         setIsLogged(true)
-        console.log(value)
         setEndUser(JSON.parse(value));
+        setAttempt(true)
       }
     } catch(e) {
-        alert(e)
-    } finally{
         setAttempt(true)
+        alert(e)
     }
   }
 
@@ -52,7 +49,7 @@ function DetailsScreen({ navigation }) {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Que souhaitez vous faire ?</Text>
         <Button
-          title="Go to Scanner"
+          title="Scanner"
           onPress={() => navigation.navigate('Scanner')}
         />
         <Button
@@ -61,7 +58,7 @@ function DetailsScreen({ navigation }) {
         />
         <Button
           title="Déconnexion"
-          onPress={() => {removeValue().then(setIsLogged(false))}}
+          onPress={() => {removeValue().then(() => {setIsLogged(false); setAttempt(false)})}}
         />
       </View>
     );
@@ -71,11 +68,7 @@ function DetailsScreen({ navigation }) {
         <Text>Que souhaitez vous faire ?</Text>
         <Button
           title="Login"
-          onPress={() => {setAttempt(false); navigation.navigate('Login')}}
-        />
-        <Button
-          title="Déconnexion"
-          onPress={() => {removeValue().then(setIsLogged(false))}}
+          onPress={() => {setIsLogged(false); setAttempt(false); navigation.navigate('Login')}}
         />
       </View>
     )
@@ -113,7 +106,6 @@ function App() {
           <Stack.Screen name="Products" component={ProductsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
-      
   );
 }
 
