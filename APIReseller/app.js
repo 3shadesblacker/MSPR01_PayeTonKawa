@@ -6,6 +6,8 @@ import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json' assert { type: "json" };
 import cors from 'cors'
+import crypto from 'crypto-js'
+import jsonwebtoken from 'jsonwebtoken';
 import * as dotenv from 'dotenv'
 
 dotenv.config()
@@ -158,6 +160,30 @@ app.get('/orders/:id', async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+function generateAccessToken(value) {
+  return jsonwebtoken.sign(value, process.env.ACCESS_TOKEN_SECRET, Date().now + 60 * 60 * 1000);
+}
+
+function encrypt(value) {
+  return crypto.AES.encrypt(value, process.env.SALT).toString();
+}
+
+function generateHeader(Methode, DOLAPIKEY) {
+  console.log(Methode, DOLAPIKEY)
+  if (DOLAPIKEY) {
+    return {
+      method: Methode,
+      headers: {
+        DOLAPIKEY: DOLAPIKEY,
+        Accept: "application/json"
+      }
+    };
+  }
+  return {
+    method: Methode
+  };
+}
 
 app.listen(3001, () => {
   console.log('API listening on port 3001');
