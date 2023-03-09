@@ -4,7 +4,7 @@ import qrcode from 'qrcode';
 import handlebars from 'handlebars';
 import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json' assert { type: "json" };
+// import swaggerDocument from './swagger.json' assert { type: "json" };
 import cors from 'cors'
 import * as dotenv from 'dotenv'
 
@@ -14,7 +14,7 @@ const app = express();
 app.use(cors());
 
 app.use(express.json())
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // transporter object 
 const transporter = nodemailer.createTransport({
@@ -36,14 +36,14 @@ app.get('/', (req, res) => {
   res.send('Bienvenue sur l\'API de PayeTonKawa !');
 });
 
-app.get('/login', async (req, res) => {
-  const { login, password } = req.body
-  try {
-    const token = await fetch(`${process.env.BASE_URL}/login?login=${login}&password=${password}[&reset=1]`);
-    res.send(token);
-  } catch (error) {
-    res.status(500).send(error);
-  }
+app.post("/login", async (req, res) => {
+
+  const login = req.body.login.login;
+  const password = req.body.password.password;
+
+  const token = await fetch(`${process.env.BASE_URL}/login?login=${login}&password=${password}`);
+  res.send(token);
+  
 });
 
 app.post('/qrcode', async (req, res) => {
