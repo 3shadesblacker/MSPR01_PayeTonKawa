@@ -4,7 +4,7 @@ import qrcode from 'qrcode';
 import handlebars from 'handlebars';
 import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json' assert { type: "json" };
+// import swaggerDocument from './swagger.json' assert { type: "json" };
 import cors from 'cors'
 import crypto from 'crypto-js'
 import jsonwebtoken from 'jsonwebtoken';
@@ -16,7 +16,7 @@ const app = express();
 app.use(cors());
 
 app.use(express.json())
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // transporter object 
 const transporter = nodemailer.createTransport({
@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
+
   const { identifiant, password } = req.body;
   if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
     await fetch(`${baseUri}/login?login=${identifiant}&password=${password}&reset=1`, generateHeader("GET"))
@@ -59,6 +60,7 @@ app.post("/login", async (req, res) => {
     console.log("Identifiant ou mot de passe incorrect")
     res.status(403).send("Identifiant ou mot de passe incorrect");
   }
+  
 });
 
 app.post('/qrcode', async (req, res) => {

@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import cors from 'cors';
 import jsonwebtoken from 'jsonwebtoken';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json' assert { type: "json" };
+// import swaggerDocument from './swagger.json' assert { type: "json" };
 import * as dotenv from 'dotenv'
 import cryptoJs from 'crypto-js'
 import http from 'http'
@@ -12,7 +12,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 dotenv.config();
 
 const baseUri = process.env.BASE_URI;
@@ -22,9 +22,12 @@ app.get('/', (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  const { identifiant, password } = req.body;
-  if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
-    await fetch(`${baseUri}/login?login=${identifiant}&password=${password}&reset=1`, generateHeader("GET"))
+
+  const login = req.body.login.login;
+  const password = req.body.password.password;
+
+  if (login === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
+    await fetch(`${baseUri}/login?login=${login}&password=${password}`, generateHeader("GET"))
       .then(response => response.text())
       .then(result => {
         const jsonResponse = JSON.parse(result)
@@ -39,8 +42,8 @@ app.post("/login", async (req, res) => {
           res.status(403).send(error)
       });
   } else {
-    console.log("Identifiant ou mot de passe incorrect")
-    res.status(403).send("Identifiant ou mot de passe incorrect");
+    console.log("Identifiant ou mot de passe incorrect");
+    res.status(403).send("LOGIN API : Identifiant ou mot de passe incorrect login : " + login + " pw : " + password);
   }
 });
 // 
