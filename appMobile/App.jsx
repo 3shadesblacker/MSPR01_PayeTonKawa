@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './components/login/login';
 import Cafe from './components/coffee/displayCoffee';
+import ArCoffee from './components/AR/arCoffee';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function DetailsScreen({ navigation }) {
@@ -56,6 +57,10 @@ function DetailsScreen({ navigation }) {
           title="Cafe"
           onPress={() => navigation.navigate('Products')}
         />
+         <Button
+          title="AR room"
+          onPress={() => navigation.navigate('AR')}
+        />
         <Button
           title="Déconnexion"
           onPress={() => {removeValue().then(() => {setIsLogged(false); setAttempt(false)})}}
@@ -87,6 +92,12 @@ function ProductsScreen() {
   )
 }
 
+function ARScreen() {
+  return (
+    <ArCoffee></ArCoffee>
+  )
+}
+
 function LoginScreen() {
   return (
     <Login></Login>
@@ -104,6 +115,7 @@ function App() {
           <Stack.Screen name="Scanner" component={ScannerScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Products" component={ProductsScreen} />
+          <Stack.Screen name="AR" component={ARScreen} />
         </Stack.Navigator>
       </NavigationContainer>
   );
