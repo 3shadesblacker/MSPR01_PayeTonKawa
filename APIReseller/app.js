@@ -4,35 +4,25 @@ import qrcode from 'qrcode';
 import handlebars from 'handlebars';
 import fetch from "node-fetch";
 import fs from 'fs';
+import cors from 'cors'
+import jsonwebtoken from 'jsonwebtoken';
+import dotenv from 'dotenv'
 import swaggerUi from 'swagger-ui-express';
 // import swaggerDocument from './swagger.json' assert { type: "json" };
-import cors from 'cors'
-import crypto from 'crypto-js'
-import jsonwebtoken from 'jsonwebtoken';
-import * as dotenv from 'dotenv'
 
 dotenv.config()
-
-const isDev = true;
-
-  const baseUri = "http://51.38.237.216:8082/api/index.php";
-
-  // const baseUri = process.env.BASE_URI;
-
-
 const app = express();
 
 app.use(cors());
-
 app.use(express.json())
-// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+const isDev = true;
 // transporter object 
 const transporter = nodemailer.createTransport({
   pool: true,
   host: process.env.MAIL_HOST,
   port: process.env.MAIL_PORT,
-  secure: true,
+  secure: false,
   auth: {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS
@@ -41,74 +31,72 @@ const transporter = nodemailer.createTransport({
     // do not fail on invalid certs
     rejectUnauthorized: false,
   }
-})
+});
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', (req, res) => {
   res.send('Bienvenue sur l\'API de PayeTonKawa !');
 });
 
 app.post("/login", async (req, res) => {
-
-  const identifiant = req.body.login.login;
-  const password = req.body.password.password;
-
-  if (identifiant === "admin" && password === "adminkawa") {
-    await fetch(`${baseUri}/login?login=${identifiant}&password=${password}&reset=1`, generateHeader("GET"))
-      .then(response => response.text())
-      .then(result => {
-        const jsonResponse = JSON.parse(result)
-        const sendValue = {
-          DOLAPIKEY: jsonResponse.success.token,
-          token: jsonResponse.success.token
-        }
-        res.status(200).send(JSON.stringify(sendValue));
-      })
-      .catch(error => {
-        console.log(error),
-          res.status(403).send(error)
-      });
-  } else {
-    console.log("Identifiant ou mot de passe incorrect")
-    res.status(403).send("Identifiant ou mot de passe incorrect");
+  try {
+    if (req.query.login && req.query.password) {
+      console.log(process.env.BASE_URI);
+      var response = await fetch(`${process.env.BASE_URI}/login?login=${req.query.login}&password=${req.query.password}`);
+      const data = await response.json();
+      if (data.success) {
+        console.log(data.success);
+        res.send(data.success.token);
+      } else {
+        res.status(401).send(data.error);
+      };
+    } else {
+      console.log("Identifiant ou mot de passe incorrect")
+      res.status(403).send("Identifiant ou mot de passe incorrect");
+    }
   }
-  
+  catch {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 app.post('/qrcode', async (req, res) => {
-  
-  const to = req.body.email.email;
-  const token = req.body.token;
+  const to = req.query.to;
+  const token = req.query.token;
+  if (to && token)
+  {
+    // generating a qrcode
+    qrcode.toDataURL(token, (err, url) => {
+      if (err) {
+        console.error(err)
+        res.send("An error occured. Try again")
+        return
+      }
+      console.log(url);
+      // create the email option
+      const mailOptions = {
+        from: `Paie Ton Kawa <${process.env.MAIL_USER}>`,
+        subject: 'Authentification',
+        to: to,
+        html:'<body style="text-align: center">'
+              + '<h1 style="font-style: bold">Scannez ce code QR pour vous authentifier:</h1>'
+              + `<img src="${url}" alt="qrcode" style="display: block; margin: 0 auto"/>`
+            +'</body>'
+      };
 
-  // generating a qrcode
-  let code;
-  qrcode.toDataURL(token)
-    .then(url => {
-      code = url
-    })
-    .catch(err => {
-      console.error(err)
-      res.send("An error occured. Try again")
-    })
-
-  // creating html file to be sent  
-  let template = handlebars.compile(fs.readFileSync('/home/eliot/Desktop/dev/MSPR01_PayeTonKawa/APIReseller/mail.html', 'utf8'));
-  let html = template({ qrcode: code });
-
-  // create the email options
-  const mailOptions = {
-    from: process.env.MAIL_USER,
-    to: to,
-    html: html
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.error(err)
+          res.status(500).send({ message: 'Email not sent, an error has occured' });
+        } else {
+          res.send({ message: 'Email sent successfully' });
+        }
+      });
+    });
   }
+});
 
-  const resp = transporter.sendMail(mailOptions);
-
-  if (resp) {
-    res.send({ message: 'Email sent successfully' });
-  } else {
-    res.status(500).send({ message: 'Email not sent' });
-  }
-})
 
 app.get('/qrcode/:id', async (req, res) => {
   const { id } = req.params;
@@ -176,14 +164,6 @@ app.get('/orders/:id', async (req, res) => {
     res.status(500).send(error);
   }
 });
-
-function generateAccessToken(value) {
-  return jsonwebtoken.sign(value, process.env.ACCESS_TOKEN_SECRET, Date().now + 60 * 60 * 1000);
-}
-
-function encrypt(value) {
-  return crypto.AES.encrypt(value, process.env.SALT).toString();
-}
 
 function generateHeader(Methode, DOLAPIKEY) {
   console.log(Methode, DOLAPIKEY)
