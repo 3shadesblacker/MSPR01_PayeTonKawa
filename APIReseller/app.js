@@ -2,6 +2,7 @@ import express from 'express';
 import nodemailer from 'nodemailer';
 import qrcode from 'qrcode';
 import handlebars from 'handlebars';
+import fetch from "node-fetch";
 import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
 // import swaggerDocument from './swagger.json' assert { type: "json" };
@@ -12,7 +13,15 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
+const isDev = true;
+
+  const baseUri = "http://51.38.237.216:8082/api/index.php";
+
+  // const baseUri = process.env.BASE_URI;
+
+
 const app = express();
+
 app.use(cors());
 
 app.use(express.json())
@@ -40,15 +49,17 @@ app.get('/', (req, res) => {
 
 app.post("/login", async (req, res) => {
 
-  const { identifiant, password } = req.body;
-  if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
+  const identifiant = req.body.login.login;
+  const password = req.body.password.password;
+
+  if (identifiant === "admin" && password === "adminkawa") {
     await fetch(`${baseUri}/login?login=${identifiant}&password=${password}&reset=1`, generateHeader("GET"))
       .then(response => response.text())
       .then(result => {
         const jsonResponse = JSON.parse(result)
         const sendValue = {
-          DOLAPIKEY: encrypt(jsonResponse.success.token),
-          token: encrypt(generateAccessToken(jsonResponse.success.token))
+          DOLAPIKEY: jsonResponse.success.token,
+          token: jsonResponse.success.token
         }
         res.status(200).send(JSON.stringify(sendValue));
       })
@@ -64,7 +75,10 @@ app.post("/login", async (req, res) => {
 });
 
 app.post('/qrcode', async (req, res) => {
-  const { to, token } = req.body
+  
+  const to = req.body.email.email;
+  const token = req.body.token;
+
   // generating a qrcode
   let code;
   qrcode.toDataURL(token)
@@ -73,11 +87,11 @@ app.post('/qrcode', async (req, res) => {
     })
     .catch(err => {
       console.error(err)
-      res.send("An error occured. Try again magl")
+      res.send("An error occured. Try again")
     })
 
   // creating html file to be sent  
-  let template = handlebars.compile(fs.readFileSync('mail.html', 'utf8'));
+  let template = handlebars.compile(fs.readFileSync('/home/eliot/Desktop/dev/MSPR01_PayeTonKawa/APIReseller/mail.html', 'utf8'));
   let html = template({ qrcode: code });
 
   // create the email options
