@@ -165,22 +165,6 @@ app.get('/orders/:id', async (req, res) => {
   }
 });
 
-function generateHeader(Methode, DOLAPIKEY) {
-  console.log(Methode, DOLAPIKEY)
-  if (DOLAPIKEY) {
-    return {
-      method: Methode,
-      headers: {
-        DOLAPIKEY: DOLAPIKEY,
-        Accept: "application/json"
-      }
-    };
-  }
-  return {
-    method: Methode
-  };
-}
-
 app.listen(3001, () => {
   console.log('API listening on port 3001');
 });
