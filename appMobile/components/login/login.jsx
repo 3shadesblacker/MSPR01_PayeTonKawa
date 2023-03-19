@@ -11,7 +11,7 @@ const  Login = () => {
 
     const [login, setLogin] = useState("admin");
     const [password, setPassword] = useState("adminkawa");
-    const [isRevendeur, setIsRevendeur ] = useState(false);
+    const [isRevendeur, setIsRevendeur ] = useState(true);
     const [isSubmit, setIsSubmit] = useState(false);
     const [isLogged, setIsLogged] = useState(false)
     const [email, setEmail] = useState("gaillegue.eliot@gmail.com");
@@ -39,7 +39,7 @@ const  Login = () => {
                 value={password}
                 onChangeText={(e) => setPassword(e)}
             />
-            <CheckBox title="Je suis un revendeur" onIconPress={() => {setIsRevendeur(!isRevendeur)}} checked={isRevendeur}></CheckBox>
+            {/* <CheckBox title="Je suis un revendeur" onIconPress={() => {setIsRevendeur(!isRevendeur)}} checked={isRevendeur}></CheckBox> */}
             {isRevendeur ? (
             <Input
                 placeholder='email'
@@ -58,7 +58,11 @@ const  Login = () => {
                 login: {login},
                 password: {password}
             }).then(
-                res => { storeData({token: res.token, isRevendeur: isRevendeur}); setIsLogged(true)},
+                res => { storeData({token: res.token, isRevendeur: isRevendeur});
+                loginRepository.sendQRCode({
+                    email: {email},
+                    token: res.token
+                }).then(setIsLogged(true))},
                 rejected => {alert("mauvais identifiants 😿"); setIsSubmit(false)}
             )
         
