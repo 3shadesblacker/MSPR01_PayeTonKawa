@@ -9,3 +9,4 @@ CICD/var
 *.pdf
 db/*
 package-lock.json
+.env
