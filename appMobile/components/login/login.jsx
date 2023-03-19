@@ -4,10 +4,9 @@ import { View, Text } from "react-native";
 import { Button } from "@rneui/base";
 import { loginRepositories } from '../../services/repositories/loginRepositories';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from '@react-navigation/native';
 import Scanner from "../qrCode/scanner";
 
-const  Login = () => {
+const  Login = ({navigation}) => {
 
     const [login, setLogin] = useState("admin");
     const [password, setPassword] = useState("adminkawa");
@@ -16,7 +15,6 @@ const  Login = () => {
     const [isLogged, setIsLogged] = useState(false)
     const [email, setEmail] = useState("gaillegue.eliot@gmail.com");
     const [token, setToken] = useState();
-    const navigation = useNavigation();
 
     const storeData = async (value) => {
         try {
@@ -98,7 +96,7 @@ const  Login = () => {
                     <Text style={{marginTop: "10%", fontSize: "20%"}}>Paye Ton Kawa</Text>
                     <Text style={{marginTop: "10%", fontSize: "15%", textAlign:"center", paddingRight:"2%", paddingLeft:"2%"}}>Un QR code vous a été envoyé par email !</Text>
                 </View>
-                {isRevendeur ? (<Scanner></Scanner>) : (<></>)}
+                {isRevendeur ? (<Scanner navigation={navigation}></Scanner>) : (<></>)}
             </View>
         )
     }

@@ -134,10 +134,14 @@ app.get('/products', async (req, res) => {
 });
 
 app.get('/products/:id', async (req, res) => {
-  const { token } = req.body;
+  const token = req.query.token;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${process.env.BASE_URL}/products/${req.params.id}?DOLAPIKEY=${token}`);
+    const response = await fetch(`${process.env.BASE_URI}/products/${req.params.id}`,{
+      headers: {
+        DOLAPIKEY: token
+      }
+    });
     const product = await response.json();
     res.json(product);
   } catch (error) {
