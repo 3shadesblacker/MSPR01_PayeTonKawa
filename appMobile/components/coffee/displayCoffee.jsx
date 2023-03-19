@@ -17,24 +17,13 @@ const Cafe = () => {
     if(loading){
         return(
             <View>
-                {!loading && <Text>test</Text>}
-                <Text>
-                    Paye ton kawa
-                </Text>
-                <Text>
-                    Identification
-                </Text>
-                <Text>
-                    Afin de vous identifier sur l'application, merci de renseigner votre adresse mail ainsi que votre mot de passe.
-                </Text>
-                <CustomButton key={"é"}  title={"Valider"}/>
+                
             </View>
         )
     } else if (!loading) {
         return (
             <View>
                 <Text>
-                    testtestetstetstetst
                     {data.map((product) => (
                         product.name
                     ))}

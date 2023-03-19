@@ -116,10 +116,15 @@ app.post("/submit", (req, res) => {
 })
 
 app.get('/products', async (req, res) => {
-  const { token } = req.body;
+  const token = req.query.token;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${process.env.BASE_URL}/products?DOLAPIKEY=${token}`);
+    const response = await fetch(`${process.env.BASE_URI}/products`,{
+      headers: {
+        DOLAPIKEY: token
+      }
+    }
+    );
     const customers = await response.json();
     console.log(customers);
     res.json(customers);

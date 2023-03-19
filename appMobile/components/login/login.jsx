@@ -72,11 +72,12 @@ const  Login = () => {
                 login,
                 password
             }).then(
-                res => {storeData({token: res.token, isRevendeur: isRevendeur});
+                res => {
                 loginRepository.sendQRCode({
                     to: email,
                     token: res.token
-                }).then(setIsLogged(true))},
+                }).then(setIsLogged(true))
+            },
                 rejected => {alert("mauvais identifiants 😿"); setIsSubmit(false)}
             )
         
