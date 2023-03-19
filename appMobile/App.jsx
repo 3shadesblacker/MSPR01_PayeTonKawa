@@ -10,6 +10,7 @@ import Login from './components/login/login';
 import Cafe from './components/coffee/displayCoffee';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 function DetailsScreen({ navigation }) {
 
   const [isLogged, setIsLogged] = useState(false)
@@ -46,7 +47,7 @@ function DetailsScreen({ navigation }) {
   
   if(isLogged){
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:"#FFE8BC" }}>
         <Text>Que souhaitez vous faire ?</Text>
         <Button
           title="Scanner"
@@ -64,9 +65,20 @@ function DetailsScreen({ navigation }) {
     );
   }else{
     return(
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Que souhaitez vous faire ?</Text>
+      <View style={{backgroundColor:"#FFE8BC", minHeight:"100%"}}>
+        <View style={{display:"flex", width:"100%", height:"50%", justifyContent:"center", alignItems:"center"}}>
+            <View style={{borderRadius:"100%", backgroundColor:"#F3D496", height:150, width:150}}>
+            </View>
+            <Text style={{marginTop: "10%", fontSize: "20%"}}>Paye Ton Kawa</Text>
+            <Text style={{marginTop: "10%", fontSize: "15%", textAlign:"center", paddingRight:"2%", paddingLeft:"2%"}}>Que souhaitez-vous faire ?</Text>
+        </View>
         <Button
+        buttonStyle={{
+          backgroundColor:"#F3D496",
+          borderRadius: "10%",
+          width:"70%",
+          alignSelf:"center"
+        }} 
           title="Login"
           onPress={() => {setIsLogged(false); setAttempt(false); navigation.navigate('Login')}}
         />

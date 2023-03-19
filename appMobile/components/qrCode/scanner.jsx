@@ -40,7 +40,9 @@ export default function Scanner() {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 100,
-        height: '50%'
+        height: 300,
+        width: 300,
+        alignSelf: "center",
+        margin: "2%",
     }
  }); 

@@ -40,13 +40,13 @@ app.get('/', (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    if (req.query.login && req.query.password) {
+    if (req.body.login && req.body.password) {
       console.log(process.env.BASE_URI);
-      var response = await fetch(`${process.env.BASE_URI}/login?login=${req.query.login}&password=${req.query.password}`);
+      var response = await fetch(`${process.env.BASE_URI}/login?login=${req.body.login}&password=${req.body.password}`);
       const data = await response.json();
       if (data.success) {
         console.log(data.success);
-        res.send(data.success.token);
+        res.send({token: data.success.token});
       } else {
         res.status(401).send(data.error);
       };
@@ -55,15 +55,15 @@ app.post("/login", async (req, res) => {
       res.status(403).send("Identifiant ou mot de passe incorrect");
     }
   }
-  catch {
+  catch(error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
 app.post('/qrcode', async (req, res) => {
-  const to = req.query.to;
-  const token = req.query.token;
+  const to = req.body.to;
+  const token = req.body.token;
   if (to && token)
   {
     // generating a qrcode
