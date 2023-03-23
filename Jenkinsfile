@@ -43,6 +43,7 @@ pipeline {
     }
     stage("Test apiwebshop"){
       steps{
+        sh label: "Test apiwebshop",
         script: '''
           docker exec -it apiwebshop npm run test
         '''
