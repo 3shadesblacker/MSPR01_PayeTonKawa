@@ -41,5 +41,12 @@ pipeline {
         }
       }
     }
+    stage("Test apiwebshop"){
+      steps{
+        script: '''
+          docker exec -it apiwebshop npm run test
+        '''
+      }
+    }
   }
 }
