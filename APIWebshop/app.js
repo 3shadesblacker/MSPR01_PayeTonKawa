@@ -22,12 +22,10 @@ app.get('/', (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
+  const { identifiant, password } = req.body;
 
-  const login = req.body.login;
-  const password = req.body.password;
-
-  if (login === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
-    await fetch(`${baseUri}/login?login=${login}&password=${password}`, generateHeader("GET"))
+  if (identifiant === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
+    await fetch(`${baseUri}/login?login=${identifiant}&password=${password}`, generateHeader("GET"))
       .then(response => response.text())
       .then(result => {
         const jsonResponse = JSON.parse(result)
@@ -43,7 +41,7 @@ app.post("/login", async (req, res) => {
       });
   } else {
     console.log("Identifiant ou mot de passe incorrect");
-    res.status(403).send("LOGIN API : Identifiant ou mot de passe incorrect login : " + login + " pw : " + password);
+    res.status(403).send("LOGIN API : Identifiant ou mot de passe incorrect login : " + identifiant + " pw : " + password);
   }
 });
 // 
