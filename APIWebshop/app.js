@@ -23,8 +23,8 @@ app.get('/', (req, res) => {
 
 app.post("/login", async (req, res) => {
 
-  const login = req.body.login.login;
-  const password = req.body.password.password;
+  const login = req.body.login;
+  const password = req.body.password;
 
   if (login === process.env.IDENTIFIANT && password === process.env.PASSWORD) {
     await fetch(`${baseUri}/login?login=${login}&password=${password}`, generateHeader("GET"))
