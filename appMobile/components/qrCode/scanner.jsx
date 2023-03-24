@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Scanner() {
+export default function Scanner({navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
+  const [scanned, setScanned] = useState({
+    token: null,
+    isScanned: false
+  });
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('token', JSON.stringify(value))
+    } catch (e) {
+      alert(e)
+    }
+}
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -16,8 +28,8 @@ export default function Scanner() {
   }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    setScanned({token: data, isScanned: true});
+    storeData({token: data})
   };
 
   if (hasPermission === null) {
@@ -27,20 +39,27 @@ export default function Scanner() {
     return <Text>No access to camera</Text>;
   }
 
+  if(scanned.isScanned){
+    navigation.navigate("Home",{
+      token: scanned.token
+    })
+  }
   return (
     <View style={styles.container}>
       <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        onBarCodeScanned={scanned.isScanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+      {scanned.isScanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 100,
-        height: '50%'
+        height: 300,
+        width: 300,
+        alignSelf: "center",
+        margin: "2%",
     }
  }); 

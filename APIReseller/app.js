@@ -44,12 +44,11 @@ app.post("/login", async (req, res) => {
     if (req.body.login && req.body.password) {
       console.log(process.env.BASE_URI);
       var response = await fetch(`${process.env.BASE_URI}/login?login=${req.body.login}&password=${req.body.password}`);
-      console.log(response);
       const data = await response.json();
       console.log(data);
       if (data.success) {
         console.log(data.success);
-        res.send(data.success.token);
+        res.send({token: data.success.token});
       } else {
         res.status(401).send(data.error);
       }
@@ -58,8 +57,8 @@ app.post("/login", async (req, res) => {
       res.status(403).send("Identifiant ou mot de passe incorrect");
     }
   }
-  catch {
-    console.log('An error occured')
+  catch(error) {
+    console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -118,10 +117,15 @@ app.post("/submit", (req, res) => {
 })
 
 app.get('/products', async (req, res) => {
-  const { token } = req.body;
+  const token = req.query.token;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${process.env.BASE_URL}/products?DOLAPIKEY=${token}`);
+    const response = await fetch(`${process.env.BASE_URI}/products`,{
+      headers: {
+        DOLAPIKEY: token
+      }
+    }
+    );
     const customers = await response.json();
     console.log(customers);
     res.json(customers);
@@ -131,10 +135,14 @@ app.get('/products', async (req, res) => {
 });
 
 app.get('/products/:id', async (req, res) => {
-  const { token } = req.body;
+  const token = req.query.token;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${process.env.BASE_URL}/products/${req.params.id}?DOLAPIKEY=${token}`);
+    const response = await fetch(`${process.env.BASE_URI}/products/${req.params.id}`,{
+      headers: {
+        DOLAPIKEY: token
+      }
+    });
     const product = await response.json();
     res.json(product);
   } catch (error) {

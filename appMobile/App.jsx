@@ -9,8 +9,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './components/login/login';
 import Cafe from './components/coffee/displayCoffee';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import OneCafe from './components/coffee/displayOneCoffee';
 
-function DetailsScreen({ navigation }) {
+
+function DetailsScreen({ navigation, route }) {
+  
 
   const [isLogged, setIsLogged] = useState(false)
   const [endUser, setEndUser] = useState();
@@ -30,6 +33,19 @@ function DetailsScreen({ navigation }) {
     }
   }
 
+  let token = undefined;
+
+  if(route ==! undefined){
+    token = route.params.token;
+  }
+  
+  if(!attempt){
+    getData();
+  }
+
+
+  
+
   const removeValue = async () => {
       try {
         await AsyncStorage.removeItem('token')
@@ -40,23 +56,36 @@ function DetailsScreen({ navigation }) {
       }
   }
 
-  if(!attempt){
-    getData();
-  }
+  
   
   if(isLogged){
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Que souhaitez vous faire ?</Text>
+      <View style={{ flex: 1, alignItems:"stretch", justifyContent: 'center', backgroundColor:"#FFE8BC"}}>
+         <View style={{display:"flex", width:"100%", height:"50%", justifyContent:"center", alignItems:"center"}}>
+            <View style={{borderRadius:"100%", backgroundColor:"#F3D496", height:150, width:150}}>
+            </View>
+            <Text style={{marginTop: "10%", fontSize: "20%"}}>Paye Ton Kawa</Text>
+        </View>
+        
         <Button
-          title="Scanner"
-          onPress={() => navigation.navigate('Scanner')}
-        />
-        <Button
+         buttonStyle={{
+          margin:"10%",
+          backgroundColor:"#F3D496",
+          borderRadius: "10%",
+          width:"70%",
+          alignSelf:"center"
+        }} 
           title="Cafe"
           onPress={() => navigation.navigate('Products')}
         />
         <Button
+         buttonStyle={{
+          margin: "10%",
+          backgroundColor:"#F3D496",
+          borderRadius: "10%",
+          width:"70%",
+          alignSelf:"center"
+        }} 
           title="Déconnexion"
           onPress={() => {removeValue().then(() => {setIsLogged(false); setAttempt(false)})}}
         />
@@ -64,9 +93,20 @@ function DetailsScreen({ navigation }) {
     );
   }else{
     return(
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Que souhaitez vous faire ?</Text>
+      <View style={{backgroundColor:"#FFE8BC", minHeight:"100%"}}>
+        <View style={{display:"flex", width:"100%", height:"50%", justifyContent:"center", alignItems:"center"}}>
+            <View style={{borderRadius:"100%", backgroundColor:"#F3D496", height:150, width:150}}>
+            </View>
+            <Text style={{marginTop: "10%", fontSize: "20%"}}>Paye Ton Kawa</Text>
+            <Text style={{marginTop: "10%", fontSize: "15%", textAlign:"center", paddingRight:"2%", paddingLeft:"2%"}}>Que souhaitez-vous faire ?</Text>
+        </View>
         <Button
+        buttonStyle={{
+          backgroundColor:"#F3D496",
+          borderRadius: "10%",
+          width:"70%",
+          alignSelf:"center"
+        }} 
           title="Login"
           onPress={() => {setIsLogged(false); setAttempt(false); navigation.navigate('Login')}}
         />
@@ -81,15 +121,22 @@ function ScannerScreen() {
   )
 }
 
-function ProductsScreen() {
+function ProductsScreen({navigation}) {
   return (
-    <Cafe></Cafe>
+    <Cafe navigation={navigation}></Cafe>
   )
 }
 
-function LoginScreen() {
+function OneProductScreen({route, navigation}) {
+  const {itemId} = route.params;
   return (
-    <Login></Login>
+    <OneCafe navigation={navigation} itemId={itemId}></OneCafe>
+  )
+}
+
+function LoginScreen({navigation}) {
+  return (
+    <Login navigation={navigation}></Login>
   )
 }
 
@@ -104,6 +151,7 @@ function App() {
           <Stack.Screen name="Scanner" component={ScannerScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Products" component={ProductsScreen} />
+          <Stack.Screen name="OneProduct" component={OneProductScreen} />
         </Stack.Navigator>
       </NavigationContainer>
   );

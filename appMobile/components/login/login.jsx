@@ -4,19 +4,17 @@ import { View, Text } from "react-native";
 import { Button } from "@rneui/base";
 import { loginRepositories } from '../../services/repositories/loginRepositories';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from '@react-navigation/native';
 import Scanner from "../qrCode/scanner";
 
-const  Login = () => {
+const  Login = ({navigation}) => {
 
     const [login, setLogin] = useState("admin");
     const [password, setPassword] = useState("adminkawa");
-    const [isRevendeur, setIsRevendeur ] = useState(false);
+    const [isRevendeur, setIsRevendeur ] = useState(true);
     const [isSubmit, setIsSubmit] = useState(false);
     const [isLogged, setIsLogged] = useState(false)
     const [email, setEmail] = useState("gaillegue.eliot@gmail.com");
     const [token, setToken] = useState();
-    const navigation = useNavigation();
 
     const storeData = async (value) => {
         try {
@@ -28,7 +26,13 @@ const  Login = () => {
  
     if(!isSubmit){
         return( 
-        <View>
+        <View style={{backgroundColor:"#FFE8BC", minHeight:"100%"}}>
+            <View style={{display:"flex", width:"100%", height:"50%", justifyContent:"center", alignItems:"center"}}>
+                <View style={{borderRadius:"100%", backgroundColor:"#F3D496", height:150, width:150}}>
+                </View>
+                <Text style={{marginTop: "10%", fontSize: "20%"}}>Paye Ton Kawa</Text>
+                <Text style={{marginTop: "10%", fontSize: "15%", textAlign:"center", paddingRight:"2%", paddingLeft:"2%"}}>Afin de vous identifier sur l'application, merci de renseigner votre nom d'utilisateur, mot de passe et adresse email.</Text>
+            </View>
             <Input
                 placeholder='email'
                 value={login}
@@ -39,7 +43,7 @@ const  Login = () => {
                 value={password}
                 onChangeText={(e) => setPassword(e)}
             />
-            <CheckBox title="Je suis un revendeur" onIconPress={() => {setIsRevendeur(!isRevendeur)}} checked={isRevendeur}></CheckBox>
+            {/* <CheckBox title="Je suis un revendeur" onIconPress={() => {setIsRevendeur(!isRevendeur)}} checked={isRevendeur}></CheckBox> */}
             {isRevendeur ? (
             <Input
                 placeholder='email'
@@ -47,7 +51,15 @@ const  Login = () => {
                 onChangeText={(e) => setEmail(e)}
             />
             ) : (<></>)}
-            <Button title={"Submit"} onPress={() => {setIsSubmit(true)}}></Button>
+            <Button
+            buttonStyle={{
+                backgroundColor:"#F3D496",
+                borderRadius: "10%",
+                width:"70%",
+                alignSelf:"center"
+            }} 
+            title={"Envoyer email"}
+            onPress={() => {setIsSubmit(true)}}></Button>
         </View>
         )
     }else if(isSubmit && !isLogged){
@@ -55,10 +67,15 @@ const  Login = () => {
         let loginRepository = new loginRepositories(isRevendeur);
 
             loginRepository.send({
-                login: {login},
-                password: {password}
+                login,
+                password
             }).then(
-                res => { storeData({token: res.token, isRevendeur: isRevendeur}); setIsLogged(true)},
+                res => {
+                loginRepository.sendQRCode({
+                    to: email,
+                    token: res.token
+                }).then(setIsLogged(true))
+            },
                 rejected => {alert("mauvais identifiants 😿"); setIsSubmit(false)}
             )
         
@@ -72,9 +89,14 @@ const  Login = () => {
         }
 
         return(
-            <View>
-                <Text>{text}</Text>
-                {isRevendeur ? (<Scanner></Scanner>) : (<></>)}
+            <View style={{backgroundColor:"#FFE8BC", minHeight:"100%"}}>
+                <View style={{display:"flex", width:"100%", height:"50%", justifyContent:"center", alignItems:"center"}}>
+                    <View style={{borderRadius:"100%", backgroundColor:"#F3D496", height:150, width:150}}>
+                    </View>
+                    <Text style={{marginTop: "10%", fontSize: "20%"}}>Paye Ton Kawa</Text>
+                    <Text style={{marginTop: "10%", fontSize: "15%", textAlign:"center", paddingRight:"2%", paddingLeft:"2%"}}>Un QR code vous a été envoyé par email !</Text>
+                </View>
+                {isRevendeur ? (<Scanner navigation={navigation}></Scanner>) : (<></>)}
             </View>
         )
     }
