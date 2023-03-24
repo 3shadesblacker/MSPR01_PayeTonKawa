@@ -7,6 +7,7 @@ import fs from 'fs';
 import cors from 'cors'
 import jsonwebtoken from 'jsonwebtoken';
 import dotenv from 'dotenv'
+import path from 'path'
 import swaggerUi from 'swagger-ui-express';
 // import swaggerDocument from './swagger.json' assert { type: "json" };
 
@@ -40,30 +41,32 @@ app.get('/', (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    if (req.query.login && req.query.password) {
+    if (req.body.login && req.body.password) {
       console.log(process.env.BASE_URI);
-      var response = await fetch(`${process.env.BASE_URI}/login?login=${req.query.login}&password=${req.query.password}`);
+      var response = await fetch(`${process.env.BASE_URI}/login?login=${req.body.login}&password=${req.body.password}`);
+      console.log(response);
       const data = await response.json();
+      console.log(data);
       if (data.success) {
         console.log(data.success);
         res.send(data.success.token);
       } else {
         res.status(401).send(data.error);
-      };
+      }
     } else {
       console.log("Identifiant ou mot de passe incorrect")
       res.status(403).send("Identifiant ou mot de passe incorrect");
     }
   }
   catch {
-    console.error(error);
+    console.log('An error occured')
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
+
 app.post('/qrcode', async (req, res) => {
-  const to = req.query.to;
-  const token = req.query.token;
+  const {to, token} = req.body;
   if (to && token)
   {
     // generating a qrcode
@@ -73,21 +76,20 @@ app.post('/qrcode', async (req, res) => {
         res.send("An error occured. Try again")
         return
       }
-      console.log(url);
-      // create the email option
+      const __dirname = path.resolve();
+      let template = handlebars.compile(fs.readFileSync(path.join(__dirname, './APIReseller/mail.html'), 'utf8'))({ qrcode: url });
+      // create the email options
       const mailOptions = {
         from: `Paie Ton Kawa <${process.env.MAIL_USER}>`,
-        subject: 'Authentification',
+        subject: 'Authentification à Paie Ton Kawa !',
         to: to,
-        html:'<body style="text-align: center">'
-              + '<h1 style="font-style: bold">Scannez ce code QR pour vous authentifier:</h1>'
-              + `<img src="${url}" alt="qrcode" style="display: block; margin: 0 auto"/>`
-            +'</body>'
+        html: template
       };
 
       transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
           console.error(err)
+          console.error(info)
           res.status(500).send({ message: 'Email not sent, an error has occured' });
         } else {
           res.send({ message: 'Email sent successfully' });
