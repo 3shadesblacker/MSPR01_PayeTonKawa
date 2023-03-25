@@ -13,7 +13,6 @@ ViewStyle,
 import { Header as HeaderRNE, HeaderProps, Icon } from '@rneui/themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Outlet } from 'react-router-native';
 
 const Header = (props) => {
 
@@ -40,30 +39,29 @@ const Header = (props) => {
               </TouchableOpacity>
             </View>
         }
-        centerComponent={{ text: 'Header', style: styles.heading }}
+        centerComponent={{ text: 'Paye Ton Kawa', style: styles.heading }}
       />
-      <Outlet></Outlet>
 
       <Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
             setModalVisible(!modalVisible);
           }}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>Hello World!</Text>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>Close menu</Text>
               </Pressable>
+            </View>
+            <View>
+            
             </View>
           </View>
         </Modal>
-
     </SafeAreaProvider>
   );
 };

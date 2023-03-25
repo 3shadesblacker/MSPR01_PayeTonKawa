@@ -8,3 +8,5 @@ CICD/var
 */.idea
 *.pdf
 db/*
+package-lock.json
+.env

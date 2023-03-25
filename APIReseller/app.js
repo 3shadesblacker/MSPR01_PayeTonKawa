@@ -2,27 +2,27 @@ import express from 'express';
 import nodemailer from 'nodemailer';
 import qrcode from 'qrcode';
 import handlebars from 'handlebars';
+import fetch from "node-fetch";
 import fs from 'fs';
-import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json' assert { type: "json" };
-import crypto from 'crypto'
 import cors from 'cors'
-import * as dotenv from 'dotenv'
+import jsonwebtoken from 'jsonwebtoken';
+import dotenv from 'dotenv'
+import swaggerUi from 'swagger-ui-express';
+// import swaggerDocument from './swagger.json' assert { type: "json" };
 
 dotenv.config()
-
 const app = express();
+
 app.use(cors());
-
 app.use(express.json())
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// transporter object
+const isDev = true;
+// transporter object 
 const transporter = nodemailer.createTransport({
   pool: true,
   host: process.env.MAIL_HOST,
   port: process.env.MAIL_PORT,
-  secure: true,
+  secure: false,
   auth: {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS
@@ -31,57 +31,72 @@ const transporter = nodemailer.createTransport({
     // do not fail on invalid certs
     rejectUnauthorized: false,
   }
-})
-
-const baseUri = 'http://localhost/dolibarr/api/index.php';
+});
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', (req, res) => {
   res.send('Bienvenue sur l\'API de PayeTonKawa !');
 });
 
-app.get('/login', async (req, res) => {
-  const { login, password } = req.body
+app.post("/login", async (req, res) => {
   try {
-    const token = await fetch(`${process.env.BASE_URL}/login?login=${login}&password=${password}[&reset=1]`);
-    res.send(token);
-  } catch (error) {
-    res.status(500).send(error);
+    if (req.body.login && req.body.password) {
+      console.log(process.env.BASE_URI);
+      var response = await fetch(`${process.env.BASE_URI}/login?login=${req.body.login}&password=${req.body.password}`);
+      const data = await response.json();
+      if (data.success) {
+        console.log(data.success);
+        res.send({token: data.success.token});
+      } else {
+        res.status(401).send(data.error);
+      };
+    } else {
+      console.log("Identifiant ou mot de passe incorrect")
+      res.status(403).send("Identifiant ou mot de passe incorrect");
+    }
+  }
+  catch(error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
 app.post('/qrcode', async (req, res) => {
-  const { to, token } = req.body
-  // generating a qrcode
-  let code;
-  qrcode.toDataURL(token)
-    .then(url => {
-      code = url
-    })
-    .catch(err => {
-      console.error(err)
-      res.send("An error occured. Try again magl")
-    })
+  const to = req.body.to;
+  const token = req.body.token;
+  if (to && token)
+  {
+    // generating a qrcode
+    qrcode.toDataURL(token, (err, url) => {
+      if (err) {
+        console.error(err)
+        res.send("An error occured. Try again")
+        return
+      }
+      console.log(url);
+      // create the email option
+      const mailOptions = {
+        from: `Paie Ton Kawa <${process.env.MAIL_USER}>`,
+        subject: 'Authentification',
+        to: to,
+        html:'<body style="text-align: center">'
+              + '<h1 style="font-style: bold">Scannez ce code QR pour vous authentifier:</h1>'
+              + `<img src="${url}" alt="qrcode" style="display: block; margin: 0 auto"/>`
+            +'</body>'
+      };
 
-  // creating html file to be sent  
-  let template = handlebars.compile(fs.readFileSync('mail.html', 'utf8'));
-  let html = template({ qrcode: code });
-
-  // create the email options
-  const mailOptions = {
-    from: process.env.MAIL_USER,
-    to: to,
-    html: html
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.error(err)
+          res.status(500).send({ message: 'Email not sent, an error has occured' });
+        } else {
+          res.send({ message: 'Email sent successfully' });
+        }
+      });
+    });
   }
+});
 
-  const resp = transporter.sendMail(mailOptions);
-
-  if (resp) {
-    res.send({ message: 'Email sent successfully' });
-  } else {
-    res.status(500).send({ message: 'Email not sent' });
-  }
-
-})
 
 app.get('/qrcode/:id', async (req, res) => {
   const { id } = req.params;
@@ -92,7 +107,7 @@ app.get('/qrcode/:id', async (req, res) => {
 app.post("/submit", (req, res) => {
   const { token } = req.body;
   if (token == null) return res.sendStatus(401);
-  jsonwebtoken.verify(token, process.process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+  jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
     req.user = user;
     res.send(token)
@@ -101,10 +116,15 @@ app.post("/submit", (req, res) => {
 })
 
 app.get('/products', async (req, res) => {
-  const { token } = req.body;
+  const token = req.query.token;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${baseUri}/products?DOLAPIKEY=${token}`);
+    const response = await fetch(`${process.env.BASE_URI}/products`,{
+      headers: {
+        DOLAPIKEY: token
+      }
+    }
+    );
     const customers = await response.json();
     console.log(customers);
     res.json(customers);
@@ -114,10 +134,14 @@ app.get('/products', async (req, res) => {
 });
 
 app.get('/products/:id', async (req, res) => {
-  const { token } = req.body;
+  const token = req.query.token;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${baseUri}/products/${req.params.id}?DOLAPIKEY=${token}`);
+    const response = await fetch(`${process.env.BASE_URI}/products/${req.params.id}`,{
+      headers: {
+        DOLAPIKEY: token
+      }
+    });
     const product = await response.json();
     res.json(product);
   } catch (error) {
@@ -125,11 +149,11 @@ app.get('/products/:id', async (req, res) => {
   }
 });
 
-app.get('/stocks/:productId', async (req, res) => {
+app.get('/stocks/:id', async (req, res) => {
   const { token } = req.body;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${baseUri}/products/${req.params.id}/stock?DOLAPIKEY=${token}`);
+    const response = await fetch(`${process.env.BASE_URL}/products/${req.params.id}/stock?DOLAPIKEY=${token}`);
     const stocks = await response.json();
     console.log(stocks);
     res.json(stocks);
@@ -138,11 +162,11 @@ app.get('/stocks/:productId', async (req, res) => {
   }
 });
 
-app.get('/orders', async (req, res) => {
+app.get('/orders/:id', async (req, res) => {
   const { token } = req.body;
   if (token == null) return res.sendStatus(401);
   try {
-    const response = await fetch(`${baseUri}/orders`);
+    const response = await fetch(`${process.env.BASE_URL}/orders/${req.params.id}?DOLAPIKEY=${token}`);
     const orders = await response.json();
     res.json(orders);
   } catch (error) {
