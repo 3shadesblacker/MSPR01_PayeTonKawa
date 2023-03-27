@@ -1,8 +1,8 @@
 export class loginRepositories {
     
     constructor(isRevendeur = false){
-        this.url = isRevendeur ? "http://192.168.1.79:3001/login" : "http://192.168.1.79:3000/login";
-        this.qrCodeUrl = "http://192.168.1.79:3001/qrcode";
+        this.url = isRevendeur ? "http://51.38.237.216:3001/login" : "http://51.38.237.216:3000/login";
+        this.qrCodeUrl = "http://51.38.237.216:3001/qrcode";
     }
 
     async send(data){

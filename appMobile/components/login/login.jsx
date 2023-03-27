@@ -13,7 +13,7 @@ const  Login = ({navigation}) => {
     const [isRevendeur, setIsRevendeur ] = useState(true);
     const [isSubmit, setIsSubmit] = useState(false);
     const [isLogged, setIsLogged] = useState(false)
-    const [email, setEmail] = useState("gaillegue.eliot@gmail.com");
+    const [email, setEmail] = useState("eliot.gaillegue@epsi.fr");
     const [token, setToken] = useState();
 
     const storeData = async (value) => {
@@ -41,6 +41,7 @@ const  Login = ({navigation}) => {
             <Input
                 placeholder='mot de passe'
                 value={password}
+                secureTextEntry={true}
                 onChangeText={(e) => setPassword(e)}
             />
             {/* <CheckBox title="Je suis un revendeur" onIconPress={() => {setIsRevendeur(!isRevendeur)}} checked={isRevendeur}></CheckBox> */}

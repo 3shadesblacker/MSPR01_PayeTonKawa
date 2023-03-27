@@ -16,7 +16,7 @@ const Cafe = ({navigation}) => {
         try {
           const value = await AsyncStorage.getItem('token')
           if(value !== null) {
-            // return JSON.parse(value.token);
+            return JSON.parse(value).token
           }
         } catch(e) {
             setAttempt(true)
@@ -25,8 +25,8 @@ const Cafe = ({navigation}) => {
       }
 
     useEffect( () => {
-        getData().then(() => {
-            products.fetch()
+        getData().then(token => {
+            products.fetch(token)
             .then( data => {setData(data);}).then(()=>{setLoading(false);})
         })
     }, [])
