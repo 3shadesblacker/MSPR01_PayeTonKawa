@@ -13,11 +13,11 @@ services:
     volumes:
       - ./db:/var/lib/mysql
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8081:8080
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8081:8080
 
   apiwebshop:
     container_name: apiwebshop
@@ -30,23 +30,29 @@ services:
       - REFRESH_TOKEN_SECRET=424200000X1
       - SALT=coucou
       - IDENTIFIANT=admin
-      - PASSWORD=jVKXQklv71GxSVYp
+      - PASSWORD=adminkawa
+      - BASE_URI=http://51.38.237.216:8082/api/index.php
 
   apireseller:
     container_name: apireseller
     build: ./APIReseller
-    restart: on-failure
+    # restart: on-failure
     ports:
       - "3001:3001"
     environment:
       - ACCESS_TOKEN_SECRET=4242XX424208
       - REFRESH_TOKEN_SECRET=424200000X1
       - IDENTIFIANT=admin
-      - PASSWORD=jVKXQklv71GxSVYp
+      - PASSWORD=adminkawa
+      - MAIL_HOST=ssl0.ovh.net
+      - MAIL_PORT=587
+      - MAIL_USER=contact@ikon-design.fr
+      - MAIL_PASS=adminkawa
+      - BASE_URI=http://51.38.237.216:8082/api/index.php
   
-  dolibarr:
-    container_name: dolibarr
-    build: ./
-    restart: always
-    ports:
-      - "8082:80"
+  # dolibarr:
+  #   container_name: dolibarr
+  #   build: ./
+  #   restart: always
+  #   ports:
+  #     - "8082:80"

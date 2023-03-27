@@ -6,5 +6,7 @@ CICD/jenkins_compose
 CICD/var
 */.vs
 */.idea
-MSPR.pdf
+*.pdf
 db/*
+package-lock.json
+.env

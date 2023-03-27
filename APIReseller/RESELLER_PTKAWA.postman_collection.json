@@ -1,0 +1,264 @@
+{
+	"info": {
+		"_postman_id": "3cdf842c-421b-402a-b18d-e83f84d4e170",
+		"name": "RESELLER_PTKAWA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "welcome",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "login",
+						"value": "admin",
+						"type": "default"
+					},
+					{
+						"key": "password",
+						"value": "YZva5v22i4qHcES",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "login",
+							"value": "admin",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "YZva5v22i4qHcES",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3001/login?login=admin&password=YZva5v22i4qHcES",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"login"
+					],
+					"query": [
+						{
+							"key": "login",
+							"value": "admin"
+						},
+						{
+							"key": "password",
+							"value": "YZva5v22i4qHcES"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "qrcode",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"to\" : \"muspha@outlook.com\",\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3001/qrcode?to=gaillegue.eliot@gmail.com&token=N61UBP8uleW90A83B0y11PkHaoleMsQn",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"qrcode"
+					],
+					"query": [
+						{
+							"key": "to",
+							"value": "gaillegue.eliot@gmail.com"
+						},
+						{
+							"key": "token",
+							"value": "N61UBP8uleW90A83B0y11PkHaoleMsQn"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "submit",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3001/submit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"submit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "products",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3001/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3001/products/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "stock",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3001/stocks/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"stocks",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3001/orders/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"orders",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
