@@ -1,5 +1,7 @@
 # MSPR01_PayeTonKawa
 
+démo technique : https://youtube.com/shorts/Lm83UAcaRp4?feature=share
+
 - Le code source, disponible sur un repository git
 - Une collection POSTMAN et un fichier environnement permettant de tester manuellement l’API
 - La documentation technique décrivant les points suivants (argumentés) :
