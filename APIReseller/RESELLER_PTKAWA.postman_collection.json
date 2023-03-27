@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "3cdf842c-421b-402a-b18d-e83f84d4e170",
+		"_postman_id": "c23f5d1d-f18b-4dd8-904b-69ae906e2574",
 		"name": "RESELLER_PTKAWA",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14196323"
 	},
 	"item": [
 		{
@@ -11,10 +12,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/",
+					"raw": "http://51.38.237.216:3001/",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"51",
+						"38",
+						"237",
+						"216"
 					],
 					"port": "3001",
 					"path": [
@@ -28,52 +32,28 @@
 			"name": "login",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "login",
-						"value": "admin",
-						"type": "default"
-					},
-					{
-						"key": "password",
-						"value": "YZva5v22i4qHcES",
-						"type": "default"
-					}
-				],
+				"header": [],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "login",
-							"value": "admin",
-							"type": "default"
-						},
-						{
-							"key": "password",
-							"value": "YZva5v22i4qHcES",
-							"type": "default"
+					"mode": "raw",
+					"raw": "{\n    \"login\": \"admin\",\n    \"password\": \"adminkawa\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/login?login=admin&password=YZva5v22i4qHcES",
+					"raw": "http://51.38.237.216:3001/login",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"51",
+						"38",
+						"237",
+						"216"
 					],
 					"port": "3001",
 					"path": [
 						"login"
-					],
-					"query": [
-						{
-							"key": "login",
-							"value": "admin"
-						},
-						{
-							"key": "password",
-							"value": "YZva5v22i4qHcES"
-						}
 					]
 				}
 			},
@@ -86,27 +66,25 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"to\" : \"muspha@outlook.com\",\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+					"raw": "{\r\n    \"to\" : \"legrix.clement@gmail.com\",\r\n    \"token\" : \"245d78356713604cb49f41d7aeb5415bdebe00d4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/qrcode?to=gaillegue.eliot@gmail.com&token=N61UBP8uleW90A83B0y11PkHaoleMsQn",
+					"raw": "http://51.38.237.216:3001/qrcode",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"51",
+						"38",
+						"237",
+						"216"
 					],
 					"port": "3001",
 					"path": [
 						"qrcode"
-					],
-					"query": [
-						{
-							"key": "to",
-							"value": "gaillegue.eliot@gmail.com"
-						},
-						{
-							"key": "token",
-							"value": "N61UBP8uleW90A83B0y11PkHaoleMsQn"
-						}
 					]
 				}
 			},
@@ -119,13 +97,21 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+					"raw": "{\r\n    \"token\" : \"245d78356713604cb49f41d7aeb5415bdebe00d4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/submit",
+					"raw": "http://51.38.237.216:3001/submit",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"51",
+						"38",
+						"237",
+						"216"
 					],
 					"port": "3001",
 					"path": [
@@ -145,13 +131,21 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+					"raw": "{\r\n    \"token\" : \"245d78356713604cb49f41d7aeb5415bdebe00d4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/products",
+					"raw": "http://51.38.237.216:3001/products",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"51",
+						"38",
+						"237",
+						"216"
 					],
 					"port": "3001",
 					"path": [
@@ -171,13 +165,21 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/products/:id",
+					"raw": "http://51.38.237.216:3001/products/:id",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"51",
+						"38",
+						"237",
+						"216"
 					],
 					"port": "3001",
 					"path": [
@@ -204,13 +206,21 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/stocks/:id",
+					"raw": "http://51.38.237.216:3001/stocks/:id",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"51",
+						"38",
+						"237",
+						"216"
 					],
 					"port": "3001",
 					"path": [
@@ -237,13 +247,21 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}"
+					"raw": "{\r\n    \"token\" : \"N61UBP8uleW90A83B0y11PkHaoleMsQn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/orders/:id",
+					"raw": "http://51.38.237.216:3001/orders/:id",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"51",
+						"38",
+						"237",
+						"216"
 					],
 					"port": "3001",
 					"path": [

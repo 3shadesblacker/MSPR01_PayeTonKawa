@@ -42,23 +42,18 @@ app.get('/', (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     if (req.body.login && req.body.password) {
-      console.log(process.env.BASE_URI);
       var response = await fetch(`${process.env.BASE_URI}/login?login=${req.body.login}&password=${req.body.password}`);
       const data = await response.json();
-      console.log(data);
       if (data.success) {
-        console.log(data.success);
         res.send({token: data.success.token});
       } else {
         res.status(401).send(data.error);
       }
     } else {
-      console.log("Identifiant ou mot de passe incorrect")
       res.status(403).send("Identifiant ou mot de passe incorrect");
     }
   }
   catch(error) {
-    console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
